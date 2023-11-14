@@ -1,0 +1,967 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Linux 命令 | 曾曾家的知识库</title><meta name="author" content="zeng zeng"><meta name="copyright" content="zeng zeng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Linux 操作必备 150 个命令链接 linux 命令是对 Linux 系统进行管理的命令。对于 Linux系统来说，无论是中央处理器、内存、磁盘驱动器、键盘、鼠标，还是用户等都是文件， Linux系统管理的命令是它正常运行的核心，与之前的 DOS 命令类似。 linux 命令在系统中有两种类型：内置 Shell 命令和 Linux 命令。 线上查询及帮助命令线上查询及帮助命令 (2 个)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 命令">
+<meta property="og:url" content="http://example.com/2023/11/13/Linux-%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="曾曾家的知识库">
+<meta property="og:description" content="Linux 操作必备 150 个命令链接 linux 命令是对 Linux 系统进行管理的命令。对于 Linux系统来说，无论是中央处理器、内存、磁盘驱动器、键盘、鼠标，还是用户等都是文件， Linux系统管理的命令是它正常运行的核心，与之前的 DOS 命令类似。 linux 命令在系统中有两种类型：内置 Shell 命令和 Linux 命令。 线上查询及帮助命令线上查询及帮助命令 (2 个)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.png">
+<meta property="article:published_time" content="2023-11-13T15:06:48.000Z">
+<meta property="article:modified_time" content="2023-11-13T16:19:14.485Z">
+<meta property="article:author" content="zeng zeng">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/11/13/Linux-%E5%91%BD%E4%BB%A4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux 命令',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-14 00:19:14'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 分类</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/java/"><i class="fa-fw fas fa-folder-open"></i><span> 操作系统</span></a></li><li><a class="site-page child" href="/java/"><i class="fa-fw fas fa-folder-open"></i><span> Java</span></a></li><li><a class="site-page child" href="/java/"><i class="fa-fw fas fa-folder-open"></i><span> 技术</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于ME</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="曾曾家的知识库"><img class="site-icon" src="https://s2.loli.net/2023/11/14/CPQ7FLicpBeUgmK.png"/><span class="site-name">曾曾家的知识库</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 分类</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/java/"><i class="fa-fw fas fa-folder-open"></i><span> 操作系统</span></a></li><li><a class="site-page child" href="/java/"><i class="fa-fw fas fa-folder-open"></i><span> Java</span></a></li><li><a class="site-page child" href="/java/"><i class="fa-fw fas fa-folder-open"></i><span> 技术</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于ME</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Linux 命令</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-13T15:06:48.000Z" title="发表于 2023-11-13 23:06:48">2023-11-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-11-13T16:19:14.485Z" title="更新于 2023-11-14 00:19:14">2023-11-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux 命令"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>Linux 操作必备 150 个命令<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/bananaaa/p/7774467.html">链接</a></p>
+<p><code>linux 命令</code>是对 <code>Linux</code> 系统进行管理的命令。对于 <code>Linux</code><br>系统来说，无论是中央处理器、内存、磁盘驱动器、键盘、鼠标，还是用户等都是文件， <code>Linux</code><br>系统管理的命令是它正常运行的核心，与之前的 <code>DOS</code> 命令类似。</p>
+<p><code>linux 命令</code>在系统中有两种类型：<code>内置 Shell 命令</code>和 <code>Linux 命令</code>。</p>
+<h2 id="线上查询及帮助命令"><a href="#线上查询及帮助命令" class="headerlink" title="线上查询及帮助命令"></a>线上查询及帮助命令</h2><p>线上查询及帮助命令 (2 个)</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>man</td>
+<td>查看命令帮助，命令的词典，更复杂的还有 info，但不常用。</td>
+</tr>
+<tr>
+<td>help</td>
+<td>查看 Linux 内置命令的帮助，比如 cd 命令。</td>
+</tr>
+</tbody></table>
+<h2 id="文件和目录操作命令"><a href="#文件和目录操作命令" class="headerlink" title="文件和目录操作命令"></a>文件和目录操作命令</h2><p>文件和目录操作命令 (18 个)</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ls</td>
+<td>全拼 list，功能是列出目录的内容及其内容属性信息。</td>
+</tr>
+<tr>
+<td>cd</td>
+<td>全拼 change directory，功能是从当前工作目录切换到指定的工作目录。</td>
+</tr>
+<tr>
+<td>cp</td>
+<td>全拼 copy，其功能为复制文件或目录。</td>
+</tr>
+<tr>
+<td>find</td>
+<td>查找的意思，用于查找目录及目录下的文件。</td>
+</tr>
+<tr>
+<td>mkdir</td>
+<td>全拼 make directories，其功能是创建目录。</td>
+</tr>
+<tr>
+<td>mv</td>
+<td>全拼 move，其功能是移动或重命名文件。</td>
+</tr>
+<tr>
+<td>pwd</td>
+<td>全拼 print working directory，其功能是显示当前工作目录的绝对路径。</td>
+</tr>
+<tr>
+<td>rename</td>
+<td>用于重命名文件。</td>
+</tr>
+<tr>
+<td>rm</td>
+<td>全拼 remove，其功能是删除一个或多个文件或目录。</td>
+</tr>
+<tr>
+<td>rmdir</td>
+<td>全拼 remove empty directories，功能是删除空目录。</td>
+</tr>
+<tr>
+<td>touch</td>
+<td>创建新的空文件，改变已有文件的时间戳属性。</td>
+</tr>
+<tr>
+<td>tree</td>
+<td>功能是以树形结构显示目录下的内容。</td>
+</tr>
+<tr>
+<td>basename</td>
+<td>显示文件名或目录名。</td>
+</tr>
+<tr>
+<td>dirname</td>
+<td>显示文件或目录路径。</td>
+</tr>
+<tr>
+<td>chattr</td>
+<td>改变文件的扩展属性。</td>
+</tr>
+<tr>
+<td>lsattr</td>
+<td>查看文件扩展属性。</td>
+</tr>
+<tr>
+<td>file</td>
+<td>显示文件的类型。</td>
+</tr>
+<tr>
+<td>md5sum</td>
+<td>计算和校验文件的 MD5 值。</td>
+</tr>
+</tbody></table>
+<h2 id="查看文件及内容处理命令"><a href="#查看文件及内容处理命令" class="headerlink" title="查看文件及内容处理命令"></a>查看文件及内容处理命令</h2><p>查看文件及内容处理命令（21 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cat</td>
+<td>全拼 concatenate，功能是用于连接多个文件并且打印到屏幕输出或重定向到指定文件中。</td>
+</tr>
+<tr>
+<td>tac</td>
+<td>tac 是 cat 的反向拼写，因此命令的功能为反向显示文件内容。</td>
+</tr>
+<tr>
+<td>more</td>
+<td>分页显示文件内容。</td>
+</tr>
+<tr>
+<td>less</td>
+<td>分页显示文件内容，more 命令的相反用法。</td>
+</tr>
+<tr>
+<td>head</td>
+<td>显示文件内容的头部。</td>
+</tr>
+<tr>
+<td>tail</td>
+<td>显示文件内容的尾部。</td>
+</tr>
+<tr>
+<td>cut</td>
+<td>将文件的每一行按指定分隔符分割并输出。</td>
+</tr>
+<tr>
+<td>split</td>
+<td>分割文件为不同的小片段。</td>
+</tr>
+<tr>
+<td>paste</td>
+<td>按行合并文件内容。</td>
+</tr>
+<tr>
+<td>sort</td>
+<td>对文件的文本内容排序。</td>
+</tr>
+<tr>
+<td>uniq</td>
+<td>去除重复行。oldboy</td>
+</tr>
+<tr>
+<td>wc</td>
+<td>统计文件的行数、单词数或字节数。</td>
+</tr>
+<tr>
+<td>iconv</td>
+<td>转换文件的编码格式。</td>
+</tr>
+<tr>
+<td>dos2unix</td>
+<td>将 DOS 格式文件转换成 UNIX 格式。</td>
+</tr>
+<tr>
+<td>diff</td>
+<td>全拼 difference，比较文件的差异，常用于文本文件。</td>
+</tr>
+<tr>
+<td>vimdiff</td>
+<td>命令行可视化文件比较工具，常用于文本文件。</td>
+</tr>
+<tr>
+<td>rev</td>
+<td>反向输出文件内容。</td>
+</tr>
+<tr>
+<td>grep&#x2F;egrep</td>
+<td>过滤字符串，三剑客老三。</td>
+</tr>
+<tr>
+<td>join</td>
+<td>按两个文件的相同字段合并。</td>
+</tr>
+<tr>
+<td>tr</td>
+<td>替换或删除字符。</td>
+</tr>
+<tr>
+<td>vi&#x2F;vim</td>
+<td>命令行文本编辑器。</td>
+</tr>
+</tbody></table>
+<h2 id="文件压缩及解压缩命令"><a href="#文件压缩及解压缩命令" class="headerlink" title="文件压缩及解压缩命令"></a>文件压缩及解压缩命令</h2><p>文件压缩及解压缩命令（4 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tar</td>
+<td>打包压缩。oldboy</td>
+</tr>
+<tr>
+<td>unzip</td>
+<td>解压文件。</td>
+</tr>
+<tr>
+<td>gzip</td>
+<td>gzip 压缩工具。</td>
+</tr>
+<tr>
+<td>zip</td>
+<td>压缩工具。</td>
+</tr>
+</tbody></table>
+<h2 id="信息显示命令"><a href="#信息显示命令" class="headerlink" title="信息显示命令"></a>信息显示命令</h2><p>信息显示命令（11 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>uname</td>
+<td>显示操作系统相关信息的命令。</td>
+</tr>
+<tr>
+<td>hostname</td>
+<td>显示或者设置当前系统的主机名。</td>
+</tr>
+<tr>
+<td>dmesg</td>
+<td>显示开机信息，用于诊断系统故障。</td>
+</tr>
+<tr>
+<td>uptime</td>
+<td>显示系统运行时间及负载。</td>
+</tr>
+<tr>
+<td>stat</td>
+<td>显示文件或文件系统的状态。</td>
+</tr>
+<tr>
+<td>du</td>
+<td>计算磁盘空间使用情况。</td>
+</tr>
+<tr>
+<td>df</td>
+<td>报告文件系统磁盘空间的使用情况。</td>
+</tr>
+<tr>
+<td>top</td>
+<td>实时显示系统资源使用情况。</td>
+</tr>
+<tr>
+<td>free</td>
+<td>查看系统内存。</td>
+</tr>
+<tr>
+<td>date</td>
+<td>显示与设置系统时间。</td>
+</tr>
+<tr>
+<td>cal</td>
+<td>查看日历等时间信息。</td>
+</tr>
+</tbody></table>
+<h2 id="搜索文件命令"><a href="#搜索文件命令" class="headerlink" title="搜索文件命令"></a>搜索文件命令</h2><p>搜索文件命令（4 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>which</td>
+<td>查找二进制命令，按环境变量 PATH 路径查找。</td>
+</tr>
+<tr>
+<td>find</td>
+<td>从磁盘遍历查找文件或目录。</td>
+</tr>
+<tr>
+<td>whereis</td>
+<td>查找二进制命令，按环境变量 PATH 路径查找。</td>
+</tr>
+<tr>
+<td>locate</td>
+<td>从数据库 (&#x2F;var&#x2F;lib&#x2F;mlocate&#x2F;mlocate.db) 查找命令，使用 updatedb 更新库。</td>
+</tr>
+</tbody></table>
+<h2 id="用户管理命令"><a href="#用户管理命令" class="headerlink" title="用户管理命令"></a>用户管理命令</h2><p>用户管理命令（10 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>useradd</td>
+<td>添加用户。</td>
+</tr>
+<tr>
+<td>usermod</td>
+<td>修改系统已经存在的用户属性。</td>
+</tr>
+<tr>
+<td>userdel</td>
+<td>删除用户。</td>
+</tr>
+<tr>
+<td>groupadd</td>
+<td>添加用户组。</td>
+</tr>
+<tr>
+<td>passwd</td>
+<td>修改用户密码。</td>
+</tr>
+<tr>
+<td>chage</td>
+<td>修改用户密码有效期限。</td>
+</tr>
+<tr>
+<td>id</td>
+<td>查看用户的 uid,gid 及归属的用户组。</td>
+</tr>
+<tr>
+<td>su</td>
+<td>切换用户身份。</td>
+</tr>
+<tr>
+<td>visudo</td>
+<td>编辑 &#x2F; etc&#x2F;sudoers 文件的专属命令。</td>
+</tr>
+<tr>
+<td>sudo</td>
+<td>以另外一个用户身份（默认 root 用户）执行事先在 sudoers 文件允许的命令。</td>
+</tr>
+</tbody></table>
+<h2 id="基础网络操作命令"><a href="#基础网络操作命令" class="headerlink" title="基础网络操作命令"></a>基础网络操作命令</h2><p>基础网络操作命令（11 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>telnet</td>
+<td>使用 TELNET 协议远程登录。</td>
+</tr>
+<tr>
+<td>ssh</td>
+<td>使用 SSH 加密协议远程登录。</td>
+</tr>
+<tr>
+<td>scp</td>
+<td>全拼 secure copy，用于不同主机之间复制文件。</td>
+</tr>
+<tr>
+<td>wget</td>
+<td>命令行下载文件。</td>
+</tr>
+<tr>
+<td>ping</td>
+<td>测试主机之间网络的连通性。</td>
+</tr>
+<tr>
+<td>route</td>
+<td>显示和设置 linux 系统的路由表。</td>
+</tr>
+<tr>
+<td>ifconfig</td>
+<td>查看、配置、启用或禁用网络接口的命令。</td>
+</tr>
+<tr>
+<td>ifup</td>
+<td>启动网卡。</td>
+</tr>
+<tr>
+<td>ifdown</td>
+<td>关闭网卡。</td>
+</tr>
+<tr>
+<td>netstat</td>
+<td>查看网络状态。</td>
+</tr>
+<tr>
+<td>ss</td>
+<td>查看网络状态。</td>
+</tr>
+</tbody></table>
+<h2 id="深入网络操作命令"><a href="#深入网络操作命令" class="headerlink" title="深入网络操作命令"></a>深入网络操作命令</h2><p>深入网络操作命令（9 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nmap</td>
+<td>网络扫描命令。</td>
+</tr>
+<tr>
+<td>lsof</td>
+<td>全名 list open files，也就是列举系统中已经被打开的文件。</td>
+</tr>
+<tr>
+<td>mail</td>
+<td>发送和接收邮件。</td>
+</tr>
+<tr>
+<td>mutt</td>
+<td>邮件管理命令。</td>
+</tr>
+<tr>
+<td>nslookup</td>
+<td>交互式查询互联网 DNS 服务器的命令。</td>
+</tr>
+<tr>
+<td>dig</td>
+<td>查找 DNS 解析过程。</td>
+</tr>
+<tr>
+<td>host</td>
+<td>查询 DNS 的命令。</td>
+</tr>
+<tr>
+<td>traceroute</td>
+<td>追踪数据传输路由状况。</td>
+</tr>
+<tr>
+<td>tcpdump</td>
+<td>命令行的抓包工具。</td>
+</tr>
+</tbody></table>
+<h2 id="有关磁盘与文件系统的命令"><a href="#有关磁盘与文件系统的命令" class="headerlink" title="有关磁盘与文件系统的命令"></a>有关磁盘与文件系统的命令</h2><p>有关磁盘与文件系统的命令（16 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mount</td>
+<td>挂载文件系统。</td>
+</tr>
+<tr>
+<td>umount</td>
+<td>卸载文件系统。</td>
+</tr>
+<tr>
+<td>fsck</td>
+<td>检查并修复 Linux 文件系统。</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>转换或复制文件。</td>
+</tr>
+<tr>
+<td>dumpe2fs</td>
+<td>导出 ext2&#x2F;ext3&#x2F;ext4 文件系统信息。</td>
+</tr>
+<tr>
+<td>dump</td>
+<td>ext2&#x2F;3&#x2F;4 文件系统备份工具。</td>
+</tr>
+<tr>
+<td>fdisk</td>
+<td>磁盘分区命令，适用于 2TB 以下磁盘分区。</td>
+</tr>
+<tr>
+<td>parted</td>
+<td>磁盘分区命令，没有磁盘大小限制，常用于 2TB 以下磁盘分区。</td>
+</tr>
+<tr>
+<td>mkfs</td>
+<td>格式化创建 Linux 文件系统。</td>
+</tr>
+<tr>
+<td>partprobe</td>
+<td>更新内核的硬盘分区表信息。</td>
+</tr>
+<tr>
+<td>e2fsck</td>
+<td>检查 ext2&#x2F;ext3&#x2F;ext4 类型文件系统。</td>
+</tr>
+<tr>
+<td>mkswap</td>
+<td>创建 Linux 交换分区。</td>
+</tr>
+<tr>
+<td>swapon</td>
+<td>启用交换分区。</td>
+</tr>
+<tr>
+<td>swapoff</td>
+<td>关闭交换分区。</td>
+</tr>
+<tr>
+<td>sync</td>
+<td>将内存缓冲区内的数据写入磁盘。</td>
+</tr>
+<tr>
+<td>resize2fs</td>
+<td>调整 ext2&#x2F;ext3&#x2F;ext4 文件系统大小。</td>
+</tr>
+</tbody></table>
+<h2 id="系统权限及用户授权相关命令"><a href="#系统权限及用户授权相关命令" class="headerlink" title="系统权限及用户授权相关命令"></a>系统权限及用户授权相关命令</h2><p>系统权限及用户授权相关命令（4 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>chmod</td>
+<td>改变文件或目录权限。</td>
+</tr>
+<tr>
+<td>chown</td>
+<td>改变文件或目录的属主和属组。</td>
+</tr>
+<tr>
+<td>chgrp</td>
+<td>更改文件用户组。</td>
+</tr>
+<tr>
+<td>umask</td>
+<td>显示或设置权限掩码。</td>
+</tr>
+</tbody></table>
+<h2 id="查看系统用户登陆信息的命令"><a href="#查看系统用户登陆信息的命令" class="headerlink" title="查看系统用户登陆信息的命令"></a>查看系统用户登陆信息的命令</h2><p>查看系统用户登陆信息的命令（7 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>whoami</td>
+<td>显示当前有效的用户名称，相当于执行 id -un 命令。</td>
+</tr>
+<tr>
+<td>who</td>
+<td>显示目前登录系统的用户信息。</td>
+</tr>
+<tr>
+<td>w</td>
+<td>显示已经登陆系统的用户列表，并显示用户正在执行的指令。</td>
+</tr>
+<tr>
+<td>last</td>
+<td>显示登入系统的用户。</td>
+</tr>
+<tr>
+<td>lastlog</td>
+<td>显示系统中所有用户最近一次登录信息。</td>
+</tr>
+<tr>
+<td>users</td>
+<td>显示当前登录系统的所有用户的用户列表。</td>
+</tr>
+<tr>
+<td>finger</td>
+<td>查找并显示用户信息。</td>
+</tr>
+</tbody></table>
+<h2 id="内置命令及其它"><a href="#内置命令及其它" class="headerlink" title="内置命令及其它"></a>内置命令及其它</h2><p>内置命令及其它（19 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>echo</td>
+<td>打印变量，或直接输出指定的字符串</td>
+</tr>
+<tr>
+<td>printf</td>
+<td>将结果格式化输出到标准输出。</td>
+</tr>
+<tr>
+<td>rpm</td>
+<td>管理 rpm 包的命令。</td>
+</tr>
+<tr>
+<td>yum</td>
+<td>自动化简单化地管理 rpm 包的命令。</td>
+</tr>
+<tr>
+<td>watch</td>
+<td>周期性的执行给定的命令，并将命令的输出以全屏方式显示。</td>
+</tr>
+<tr>
+<td>alias</td>
+<td>设置系统别名。</td>
+</tr>
+<tr>
+<td>unalias</td>
+<td>取消系统别名。</td>
+</tr>
+<tr>
+<td>date</td>
+<td>查看或设置系统时间。</td>
+</tr>
+<tr>
+<td>clear</td>
+<td>清除屏幕，简称清屏。</td>
+</tr>
+<tr>
+<td>history</td>
+<td>查看命令执行的历史纪录。</td>
+</tr>
+<tr>
+<td>eject</td>
+<td>弹出光驱。</td>
+</tr>
+<tr>
+<td>time</td>
+<td>计算命令执行时间。</td>
+</tr>
+<tr>
+<td>nc</td>
+<td>功能强大的网络工具。</td>
+</tr>
+<tr>
+<td>xargs</td>
+<td>将标准输入转换成命令行参数。</td>
+</tr>
+<tr>
+<td>exec</td>
+<td>调用并执行指令的命令。</td>
+</tr>
+<tr>
+<td>export</td>
+<td>设置或者显示环境变量。</td>
+</tr>
+<tr>
+<td>unset</td>
+<td>删除变量或函数。</td>
+</tr>
+<tr>
+<td>type</td>
+<td>用于判断另外一个命令是否是内置命令。</td>
+</tr>
+<tr>
+<td>bc</td>
+<td>命令行科学计算器</td>
+</tr>
+</tbody></table>
+<h2 id="系统管理与性能监视命令"><a href="#系统管理与性能监视命令" class="headerlink" title="系统管理与性能监视命令"></a>系统管理与性能监视命令</h2><p>系统管理与性能监视命令 (9 个)</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>chkconfig</td>
+<td>管理 Linux 系统开机启动项。</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>虚拟内存统计。</td>
+</tr>
+<tr>
+<td>mpstat</td>
+<td>显示各个可用 CPU 的状态统计。</td>
+</tr>
+<tr>
+<td>iostat</td>
+<td>统计系统 IO。</td>
+</tr>
+<tr>
+<td>sar</td>
+<td>全面地获取系统的 CPU、运行队列、磁盘 I&#x2F;O、分页（交换区）、内存、 CPU 中断和网络等性能数据。</td>
+</tr>
+<tr>
+<td>ipcs</td>
+<td>用于报告 Linux 中进程间通信设施的状态，显示的信息包括消息列表、共享内存和信号量的信息。</td>
+</tr>
+<tr>
+<td>ipcrm</td>
+<td>用来删除一个或更多的消息队列、信号量集或者共享内存标识。</td>
+</tr>
+<tr>
+<td>strace</td>
+<td>用于诊断、调试 Linux 用户空间跟踪器。我们用它来监控用户空间进程和内核的交互，比如系统调用、信号传递、进程状态变更等。</td>
+</tr>
+<tr>
+<td>ltrace</td>
+<td>命令会跟踪进程的库函数调用, 它会显现出哪个库函数被调用。</td>
+</tr>
+</tbody></table>
+<h2 id="关机-重启-注销和查看系统信息的命令"><a href="#关机-重启-注销和查看系统信息的命令" class="headerlink" title="关机 &#x2F; 重启 &#x2F; 注销和查看系统信息的命令"></a>关机 &#x2F; 重启 &#x2F; 注销和查看系统信息的命令</h2><p>关机 &#x2F; 重启 &#x2F; 注销和查看系统信息的命令（6 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>shutdown</td>
+<td>关机。</td>
+</tr>
+<tr>
+<td>halt</td>
+<td>关机。</td>
+</tr>
+<tr>
+<td>poweroff</td>
+<td>关闭电源。</td>
+</tr>
+<tr>
+<td>logout</td>
+<td>退出当前登录的 Shell。</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>退出当前登录的 Shell。</td>
+</tr>
+<tr>
+<td>Ctrl+d</td>
+<td>退出当前登录的 Shell 的快捷键。</td>
+</tr>
+</tbody></table>
+<h2 id="进程管理相关命令"><a href="#进程管理相关命令" class="headerlink" title="进程管理相关命令"></a>进程管理相关命令</h2><p>进程管理相关命令（15 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bg</td>
+<td>将一个在后台暂停的命令，变成继续执行 （在后台执行）。</td>
+</tr>
+<tr>
+<td>fg</td>
+<td>将后台中的命令调至前台继续运行。</td>
+</tr>
+<tr>
+<td>jobs</td>
+<td>查看当前有多少在后台运行的命令。</td>
+</tr>
+<tr>
+<td>kill</td>
+<td>终止进程。</td>
+</tr>
+<tr>
+<td>killall</td>
+<td>通过进程名终止进程。</td>
+</tr>
+<tr>
+<td>pkill</td>
+<td>通过进程名终止进程。</td>
+</tr>
+<tr>
+<td>crontab</td>
+<td>定时任务命令。</td>
+</tr>
+<tr>
+<td>ps</td>
+<td>显示进程的快照。</td>
+</tr>
+<tr>
+<td>pstree</td>
+<td>树形显示进程。</td>
+</tr>
+<tr>
+<td>nice&#x2F;renice</td>
+<td>调整程序运行的优先级。</td>
+</tr>
+<tr>
+<td>nohup</td>
+<td>忽略挂起信号运行指定的命令。</td>
+</tr>
+<tr>
+<td>pgrep</td>
+<td>查找匹配条件的进程。</td>
+</tr>
+<tr>
+<td>runlevel</td>
+<td>查看系统当前运行级别。</td>
+</tr>
+<tr>
+<td>init</td>
+<td>切换运行级别。</td>
+</tr>
+<tr>
+<td>service</td>
+<td>启动、停止、重新启动和关闭系统服务，还可以显示所有系统服务的当前状态。</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">zeng zeng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/11/13/Linux-%E5%91%BD%E4%BB%A4/">http://example.com/2023/11/13/Linux-%E5%91%BD%E4%BB%A4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">曾曾家的知识库</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2023/11/13/Java8%E5%A4%84%E7%90%86NPE/" title="Java8 处理 NullPointerException"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java8 处理 NullPointerException</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">zeng zeng</div><div class="author-info__description">这是一个简单的网页</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zengxiong1995"><i class="fab fa-github"></i><span>关于 ME</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zengxiong1995" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:zx405931@hotmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">小破站还刚开始建设中,希望能做成一个知识库</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E4%B8%8A%E6%9F%A5%E8%AF%A2%E5%8F%8A%E5%B8%AE%E5%8A%A9%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">线上查询及帮助命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">文件和目录操作命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%8F%8A%E5%86%85%E5%AE%B9%E5%A4%84%E7%90%86%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">查看文件及内容处理命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8E%8B%E7%BC%A9%E5%8F%8A%E8%A7%A3%E5%8E%8B%E7%BC%A9%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">文件压缩及解压缩命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%98%BE%E7%A4%BA%E5%91%BD%E4%BB%A4"><span class="toc-number">5.</span> <span class="toc-text">信息显示命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E6%96%87%E4%BB%B6%E5%91%BD%E4%BB%A4"><span class="toc-number">6.</span> <span class="toc-text">搜索文件命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="toc-number">7.</span> <span class="toc-text">用户管理命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%BD%91%E7%BB%9C%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">8.</span> <span class="toc-text">基础网络操作命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B1%E5%85%A5%E7%BD%91%E7%BB%9C%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">9.</span> <span class="toc-text">深入网络操作命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%85%B3%E7%A3%81%E7%9B%98%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">10.</span> <span class="toc-text">有关磁盘与文件系统的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%9D%83%E9%99%90%E5%8F%8A%E7%94%A8%E6%88%B7%E6%8E%88%E6%9D%83%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">11.</span> <span class="toc-text">系统权限及用户授权相关命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E7%94%A8%E6%88%B7%E7%99%BB%E9%99%86%E4%BF%A1%E6%81%AF%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">12.</span> <span class="toc-text">查看系统用户登陆信息的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6%E5%AE%83"><span class="toc-number">13.</span> <span class="toc-text">内置命令及其它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E6%80%A7%E8%83%BD%E7%9B%91%E8%A7%86%E5%91%BD%E4%BB%A4"><span class="toc-number">14.</span> <span class="toc-text">系统管理与性能监视命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E6%9C%BA-%E9%87%8D%E5%90%AF-%E6%B3%A8%E9%94%80%E5%92%8C%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">15.</span> <span class="toc-text">关机 &#x2F; 重启 &#x2F; 注销和查看系统信息的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">16.</span> <span class="toc-text">进程管理相关命令</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/13/Java8%E5%A4%84%E7%90%86NPE/" title="Java8 处理 NullPointerException">Java8 处理 NullPointerException</a><time datetime="2023-11-13T15:06:48.000Z" title="发表于 2023-11-13 23:06:48">2023-11-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/13/Linux-%E5%91%BD%E4%BB%A4/" title="Linux 命令">Linux 命令</a><time datetime="2023-11-13T15:06:48.000Z" title="发表于 2023-11-13 23:06:48">2023-11-13</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By zeng zeng</div><div class="framework-info"><span>Hexo 框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>butterfly </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
