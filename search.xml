@@ -1,0 +1,1074 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>JAVA8 十大新特性</title>
+    <url>/2023/11/14/JAVA8%20%E5%8D%81%E5%A4%A7%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<h1 id="JAVA8-十大新特性"><a href="#JAVA8-十大新特性" class="headerlink" title="JAVA8 十大新特性"></a>JAVA8 十大新特性</h1><h2 id="一、接口的默认方法"><a href="#一、接口的默认方法" class="headerlink" title="一、接口的默认方法"></a>一、接口的默认方法</h2><p><code>Java 8</code>允许我们给接口添加一个非抽象的方法实现，只需要使用<code>default</code>关键字即可，这个特征又叫做<strong>扩展方法</strong>，示例如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Formula</span>&#123;</span><br><span class="line">    <span class="type">double</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> a)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> <span class="type">double</span> <span class="title function_">sqrt</span><span class="params">(<span class="type">int</span> a)</span> &#123;</span><br><span class="line">        returnMath.sqrt(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Formula</code>接口在拥有<code>calculate</code>方法之外同时还定义了<code>sqrt</code>方法，实现了<code>Formula</code>接口的子类只需要实现一个<code>calculate</code>方法，默认方法<code>sqrt</code>将在子类上可以直接使用。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Formula</span> <span class="variable">formula</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Formula</span>() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> a)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> sqrt(a * <span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line">formula.calculate(<span class="number">100</span>);     <span class="comment">// 100.0</span></span><br><span class="line">formula.sqrt(<span class="number">16</span>);           <span class="comment">// 4.0</span></span><br></pre></td></tr></table></figure>
+<p>文中的<code>formula</code>被实现为一个匿名类的实例，该代码非常容易理解，6行代码实现了计算 <code>sqrt(a * 100)</code>。在下一节中，我们将会看到实现单方法接口的更简单的做法。</p>
+<p>译者注:在<code>Java</code>中只有单继承，如果要让一个类赋予新的特性，通常是使用接口来实现，在<code>C++</code>中支持多继承，允许一个子类同时具有多个父类的接口与功能，在其他语言中，让一个类同时具有其他的可复用代码的方法叫做<code>mixin</code>。新的<code>Java 8</code> 的这个特新在编译器实现的角度上来说更加接近<code>Scala</code>的<code>trait</code>。 在<code>C#</code>中也有名为扩展方法的概念，允许给已存在的类型扩展方法，和<code>Java 8</code>的这个在语义上有差别。</p>
+<h2 id="二、Lambda-表达式"><a href="#二、Lambda-表达式" class="headerlink" title="二、Lambda 表达式"></a>二、Lambda 表达式</h2><p>首先看看在老版本的<code>Java</code>中是如何排列字符串的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; names = Arrays.asList(<span class="string">&quot;peter&quot;</span>, <span class="string">&quot;anna&quot;</span>, <span class="string">&quot;mike&quot;</span>, <span class="string">&quot;xenia&quot;</span>);</span><br><span class="line"></span><br><span class="line">Collections.sort(names, <span class="keyword">new</span> <span class="title class_">Comparator</span>&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(String a, String b)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> b.compareTo(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>只需要给静态方法 <code>Collections.sort</code> 传入一个<code>List</code>对象以及一个比较器来按指定顺序排列。通常做法都是创建一个匿名的比较器对象然后将其传递给<code>sort</code>方法。<br>在<code>Java 8</code> 中你就没必要使用这种传统的匿名对象的方式了，<code>Java 8</code>提供了更简洁的语法，<code>lambda</code>表达式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Collections.sort(names, (String a, String b) -&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> b.compareTo(a);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>看到了吧，代码变得更段且更具有可读性，但是实际上还可以写得更短：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Collections.sort(names, (String a, String b) -&gt; b.compareTo(a));</span><br></pre></td></tr></table></figure>
+<p>对于函数体只有一行代码的，你可以<strong>去掉</strong>大括号<code>&#123;&#125;</code>以及<code>return</code>关键字，但是你还可以写得更短点：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Collections.sort(names, (a, b) -&gt; b.compareTo(a));</span><br></pre></td></tr></table></figure>
+<p><code>Java</code>编译器可以自动推导出参数类型，所以你可以不用再写一次类型。接下来我们看看<code>lambda</code>表达式还能作出什么更方便的东西来.</p>
+<h2 id="三、函数式接口"><a href="#三、函数式接口" class="headerlink" title="三、函数式接口"></a>三、函数式接口</h2><p><code>Lambda</code>表达式是如何在<code>java</code>的类型系统中表示的呢？每一个<code>lambda</code>表达式都对应一个类型，通常是接口类型。而“函数式接口”是指仅仅只包含一个抽象方法的接口，每一个该类型的<code>lambda</code>表达式都会被匹配到这个抽象方法。因为 默认方法 不算抽象方法，所以你也可以给你的函数式接口添加默认方法。</p>
+<p>我们可以将<code>lambda</code>表达式当作任意只包含一个抽象方法的接口类型，确保你的接口一定达到这个要求，你只需要给你的接口添加 <code>@FunctionalInterface</code> 注解，编译器如果发现你标注了这个注解的接口有多于一个抽象方法的时候会报错的。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Converter</span>&lt;F, T&gt; &#123;</span><br><span class="line">    T <span class="title function_">convert</span><span class="params">(F from)</span>;</span><br><span class="line">&#125;</span><br><span class="line">Converter&lt;String, Integer&gt; converter = (from) -&gt; Integer.valueOf(from);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">converted</span> <span class="operator">=</span> converter.convert(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">System.out.println(converted);    <span class="comment">// 123</span></span><br></pre></td></tr></table></figure>
+
+<p>需要注意如果<code>@FunctionalInterface</code>如果没有指定，上面的代码也是对的。</p>
+<p>译者注:将<code>lambda</code>表达式映射到一个单方法的接口上，这种做法在<code>Java 8</code>之前就有别的语言实现，比如<code>Rhino JavaScript</code>解释器，如果一个函数参数接收一个单方法的接口而你传递的是一个<code>function</code>，<code>Rhino</code> 解释器会自动做一个单接口的实例到<code>function</code>的适配器，典型的应用场景有 <code>org.w3c.dom.events.EventTarget</code> 的<code>addEventListener</code> 第二个参数 <code>EventListener</code>。</p>
+<h2 id="四、方法与构造函数引用"><a href="#四、方法与构造函数引用" class="headerlink" title="四、方法与构造函数引用"></a>四、方法与构造函数引用</h2><p>前一节中的代码还可以通过静态方法引用来表示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Converter&lt;String, Integer&gt; converter = Integer::valueOf;</span><br><span class="line"><span class="type">Integer</span> <span class="variable">converted</span> <span class="operator">=</span> converter.convert(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">System.out.println(converted);   <span class="comment">// 123</span></span><br></pre></td></tr></table></figure>
+<p><code>Java 8</code> 允许你使用 <code>::</code> 关键字来传递方法或者构造函数引用，上面的代码展示了如何引用一个静态方法，我们也可以引用一个对象的方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">converter = something::startsWith;</span><br><span class="line"><span class="type">String</span> <span class="variable">converted</span> <span class="operator">=</span> converter.convert(<span class="string">&quot;Java&quot;</span>);</span><br><span class="line">System.out.println(converted);    <span class="comment">// &quot;J&quot;</span></span><br></pre></td></tr></table></figure>
+<p>接下来看看构造函数是如何使用<code>::</code>关键字来引用的，首先我们定义一个包含多个构造函数的简单类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">    String firstName;</span><br><span class="line">    String lastName;</span><br><span class="line">    </span><br><span class="line">    Person() &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    Person(String firstName, String lastName) &#123;</span><br><span class="line">        <span class="built_in">this</span>.firstName = firstName;</span><br><span class="line">        <span class="built_in">this</span>.lastName = lastName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来我们指定一个用来创建Person对象的对象工厂接口：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">PersonFactory</span>&lt;P <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; &#123;</span><br><span class="line">    P <span class="title function_">create</span><span class="params">(String firstName, String lastName)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们使用构造函数引用来将他们关联起来，而不是实现一个完整的工厂：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">PersonFactory&lt;Person&gt; personFactory = Person::<span class="keyword">new</span>;</span><br><span class="line"><span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> personFactory.create(<span class="string">&quot;Peter&quot;</span>, <span class="string">&quot;Parker&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>我们只需要使用 <code>Person::new</code> 来获取<code>Person</code>类构造函数的引用，<code>Java</code>编译器会自动根据<code>PersonFactory.create</code>方法的签名来选择合适的构造函数。</p>
+<h2 id="五、Lambda-作用域"><a href="#五、Lambda-作用域" class="headerlink" title="五、Lambda 作用域"></a>五、Lambda 作用域</h2><p>在<code>lambda</code>表达式中访问外层作用域和老版本的匿名对象中的方式很相似。你可以直接访问标记了<code>final</code>的外层局部变量，或者实例的字段以及静态变量。</p>
+<h2 id="六、访问局部变量"><a href="#六、访问局部变量" class="headerlink" title="六、访问局部变量"></a>六、访问局部变量</h2><p>我们可以直接在<code>lambda</code>表达式中访问外层的局部变量：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">finalint</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">Converter&lt;Integer, String&gt; stringConverter = (from) -&gt; String.valueOf(from + num);</span><br><span class="line"></span><br><span class="line">stringConverter.convert(<span class="number">2</span>);     <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+<p>但是和匿名对象不同的是，这里的变量<code>num</code>可以不用声明为<code>final</code>，该代码同样正确：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">Converter&lt;Integer, String&gt; stringConverter = (from) -&gt; String.valueOf(from+ num);</span><br><span class="line"></span><br><span class="line">stringConverter.convert(<span class="number">2</span>);     <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+<p>不过这里的<code>num</code>必须不可被后面的代码修改（即隐性的具有<code>final</code>的语义），例如下面的就无法编译：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 编译报错</span></span><br><span class="line"><span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">Converter&lt;Integer, String&gt; stringConverter = (from) -&gt; String.valueOf(from+ num);</span><br><span class="line">num = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>在<code>lambda</code>表达式中试图修改<code>num</code>同样是不允许的。</p>
+<h2 id="七、访问对象字段与静态变量"><a href="#七、访问对象字段与静态变量" class="headerlink" title="七、访问对象字段与静态变量"></a>七、访问对象字段与静态变量</h2><p>和本地变量不同的是，<code>lambda</code>内部对于实例的字段以及静态变量是即可读又可写。该行为和匿名对象是一致的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Lambda4</span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> outerStaticNum;</span><br><span class="line">    <span class="type">int</span> outerNum;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">testScopes</span><span class="params">()</span> &#123;</span><br><span class="line">        Converter&lt;Integer, String&gt; stringConverter1 = (from) -&gt; &#123;</span><br><span class="line">            outerNum = <span class="number">23</span>;</span><br><span class="line">            returnString.valueOf(from);</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        Converter&lt;Integer, String&gt; stringConverter2 = (from) -&gt; &#123;</span><br><span class="line">            outerStaticNum = <span class="number">72</span>;</span><br><span class="line">            returnString.valueOf(from);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="八、访问接口的默认方法"><a href="#八、访问接口的默认方法" class="headerlink" title="八、访问接口的默认方法"></a>八、访问接口的默认方法</h2><p>还记得第一节中的<code>formula</code>例子么，接口<code>Formula</code>定义了一个默认方法<code>sqrt</code>可以直接被<code>formula</code>的实例包括匿名对象访问到，但是在<code>lambda</code>表达式中这个是不行的。<code>Lambda</code>表达式中是无法访问到默认方法的，以下代码将无法编译：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Formula</span> <span class="variable">formula</span> <span class="operator">=</span> (a) -&gt; sqrt( a * <span class="number">100</span>);</span><br><span class="line">Built-inFunctionalInterfaces</span><br></pre></td></tr></table></figure>
+<p><code>JDK 1.8 API</code>包含了很多内建的函数式接口，在老<code>Java</code>中常用到的比如<code>Comparator</code>或者<code>Runnable</code>接口，这些接口都增加了<code>@FunctionalInterface</code>注解以便能用在<code>lambda</code>上。<code>Java 8 API</code>同样还提供了很多全新的函数式接口来让工作更加方便，有一些接口是来自<code>Google Guava</code>库里的，即便你对这些很熟悉了，还是有必要看看这些是如何扩展到<code>lambda</code>上使用的。</p>
+<h3 id="Predicate接口"><a href="#Predicate接口" class="headerlink" title="Predicate接口"></a>Predicate接口</h3><p><code>Predicate</code> 接口只有一个参数，返回<code>boolean</code>类型。该接口包含多种默认方法来将<code>Predicate</code>组合成其他复杂的逻辑（比如：与，或，非）：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Predicate&lt;String&gt; predicate = (s) -&gt; s.length() &gt; <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">predicate.test(<span class="string">&quot;foo&quot;</span>);              <span class="comment">// true</span></span><br><span class="line">predicate.negate().test(<span class="string">&quot;foo&quot;</span>);     <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">Predicate&lt;Boolean&gt; nonNull = Objects::nonNull;</span><br><span class="line">Predicate&lt;Boolean&gt; isNull = Objects::isNull;</span><br><span class="line"></span><br><span class="line">Predicate&lt;String&gt; isEmpty = String::isEmpty;</span><br><span class="line">Predicate&lt;String&gt; isNotEmpty = isEmpty.negate();</span><br></pre></td></tr></table></figure>
+
+<h3 id="Function-接口"><a href="#Function-接口" class="headerlink" title="Function 接口"></a>Function 接口</h3><p><code>Function</code> 接口有一个参数并且返回一个结果，并附带了一些可以和其他函数组合的默认方法<code>（compose, andThen）</code>:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Function&lt;String, Integer&gt; toInteger = Integer::valueOf;</span><br><span class="line">Function&lt;String, String&gt; backToString = toInteger.andThen(String::valueOf);</span><br><span class="line"></span><br><span class="line">backToString.apply(<span class="string">&quot;123&quot;</span>);     <span class="comment">// &quot;123&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Supplier-接口"><a href="#Supplier-接口" class="headerlink" title="Supplier 接口"></a>Supplier 接口</h3><p><code>Supplier</code> 接口返回一个任意范型的值，和<code>Function</code>接口不同的是该接口没有任何参数:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Supplier&lt;Person&gt; personSupplier = Person::<span class="keyword">new</span>;</span><br><span class="line">personSupplier.get();   <span class="comment">// new Person</span></span><br></pre></td></tr></table></figure>
+<h3 id="Consumer-接口"><a href="#Consumer-接口" class="headerlink" title="Consumer 接口"></a>Consumer 接口</h3><p><code>Consumer</code> 接口表示执行在单个参数上的操作。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Consumer&lt;Person&gt; greeter = (p) -&gt; System.out.println(<span class="string">&quot;Hello, &quot;</span>+ p.firstName);</span><br><span class="line">greeter.accept(newPerson(<span class="string">&quot;Luke&quot;</span>, <span class="string">&quot;Skywalker&quot;</span>));</span><br></pre></td></tr></table></figure>
+<h3 id="Comparator-接口"><a href="#Comparator-接口" class="headerlink" title="Comparator 接口"></a>Comparator 接口</h3><p><code>Comparator</code> 是老<code>Java</code>中的经典接口， <code>Java 8</code>在此之上添加了多种默认方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Comparator&lt;Person&gt; comparator = (p1, p2) -&gt; p1.firstName.compareTo(p2.firstName);</span><br><span class="line"></span><br><span class="line"><span class="type">Person</span> <span class="variable">p1</span> <span class="operator">=</span> newPerson(<span class="string">&quot;John&quot;</span>, <span class="string">&quot;Doe&quot;</span>);</span><br><span class="line"><span class="type">Person</span> <span class="variable">p2</span> <span class="operator">=</span> newPerson(<span class="string">&quot;Alice&quot;</span>, <span class="string">&quot;Wonderland&quot;</span>);</span><br><span class="line"></span><br><span class="line">comparator.compare(p1, p2);             <span class="comment">// &gt; 0</span></span><br><span class="line">comparator.reversed().compare(p1, p2);  <span class="comment">// &lt; 0</span></span><br></pre></td></tr></table></figure>
+<h3 id="Optional-接口"><a href="#Optional-接口" class="headerlink" title="Optional 接口"></a>Optional 接口</h3><p><code>Optional</code> 不是函数是接口，这是个用来防止<code>NullPointerException</code>异常的辅助类型，这是下一节中将要用到的重要概念，现在先简单的看看这个接口能干什么:</p>
+<p><code>Optional</code> 被定义为一个简单的容器，其值可能是<code>null</code>或者不是<code>null</code>。在<code>Java 8</code>之前一般某个函数应该返回非空对象但是偶尔却可能返回了<code>null</code>，而在<code>Java 8</code>中，不推荐你返回<code>null</code>而是返回<code>Optional</code>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional&lt;String&gt; optional = Optional.of(<span class="string">&quot;bam&quot;</span>);</span><br><span class="line"></span><br><span class="line">optional.isPresent();           <span class="comment">// true</span></span><br><span class="line">optional.get();                 <span class="comment">// &quot;bam&quot;</span></span><br><span class="line">optional.orElse(<span class="string">&quot;fallback&quot;</span>);    <span class="comment">// &quot;bam&quot;</span></span><br><span class="line"></span><br><span class="line">optional.ifPresent((s) -&gt; System.out.println(s.charAt(<span class="number">0</span>)));     <span class="comment">// &quot;b&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Stream-接口"><a href="#Stream-接口" class="headerlink" title="Stream 接口"></a>Stream 接口</h3><p><code>java.util.Stream</code> 表示能应用在一组元素上一次执行的操作序列。<code>Stream</code> 操作分为中间操作或者最终操作两种，最终操作返回一特定类型的计算结果，而中间操作返回<code>Stream</code>本身，这样你就可以将多个操作依次串起来。<code>Stream</code> 的创建需要指定一个数据源，比如 <code>java.util.Collection</code> 的子类，<code>List</code>或者<code>Set</code>， <code>Map</code>不支持。<code>Stream</code>的操作可以串行执行或者并行执行。</p>
+<p>首先看看<code>Stream</code>是怎么用，首先创建实例代码的用到的数据<code>List</code>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; stringCollection = newArrayList&lt;&gt;();</span><br><span class="line">stringCollection.add(<span class="string">&quot;ddd2&quot;</span>);</span><br><span class="line">stringCollection.add(<span class="string">&quot;aaa2&quot;</span>);</span><br><span class="line">stringCollection.add(<span class="string">&quot;bbb1&quot;</span>);</span><br><span class="line">stringCollection.add(<span class="string">&quot;aaa1&quot;</span>);</span><br><span class="line">stringCollection.add(<span class="string">&quot;bbb3&quot;</span>);</span><br><span class="line">stringCollection.add(<span class="string">&quot;ccc&quot;</span>);</span><br><span class="line">stringCollection.add(<span class="string">&quot;bbb2&quot;</span>);</span><br><span class="line">stringCollection.add(<span class="string">&quot;ddd1&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>Java 8</code>扩展了集合类，可以通过 <code>Collection.stream()</code> 或者 <code>Collection.parallelStream()</code> 来创建一个<code>Stream</code>。下面几节将详细解释常用的<code>Stream</code>操作：</p>
+<h4 id="Filter-过滤"><a href="#Filter-过滤" class="headerlink" title="Filter 过滤"></a>Filter 过滤</h4><p>过滤通过一个<code>predicate</code>接口来过滤并只保留符合条件的元素，该操作属于中间操作，所以我们可以在过滤后的结果来应用其他<code>Stream</code>操作（比如<code>forEach</code>）。<code>forEach</code>需要一个函数来对过滤后的元素依次执行。<code>forEach</code>是一个最终操作，所以我们不能在<code>forEach</code>之后来执行其他<code>Stream</code>操作。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// &quot;aaa2&quot;, &quot;aaa1&quot;</span></span><br><span class="line">stringCollection.stream().filter((s) -&gt; s.startsWith(<span class="string">&quot;a&quot;</span>)).forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<h4 id="Sort-排序"><a href="#Sort-排序" class="headerlink" title="Sort 排序"></a>Sort 排序</h4><p>排序是一个中间操作，返回的是排序好后的<code>Stream</code>。如果你不指定一个自定义的<code>Comparator</code>则会使用默认排序。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// &quot;aaa1&quot;, &quot;aaa2&quot;</span></span><br><span class="line">stringCollection.stream().sorted().filter((s) -&gt; s.startsWith(<span class="string">&quot;a&quot;</span>)).forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，排序只创建了一个排列好后的<code>Stream</code>，而不会影响原有的数据源，排序之后原数据<code>stringCollection</code>是不会被修改的。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ddd2, aaa2, bbb1, aaa1, bbb3, ccc, bbb2, ddd1</span></span><br><span class="line">System.out.println(stringCollection);</span><br></pre></td></tr></table></figure>
+<p><code>Map</code> 映射中间操作<code>map</code>会将元素根据指定的<code>Function</code>接口来依次将元素转成另外的对象，下面的示例展示了将字符串转换为大写字符串。你也可以通过<code>map</code>来将对象转换成其他类型，<code>map</code>返回的<code>Stream</code>类型是根据你<code>map</code>传递进去的函数的返回值决定的。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// &quot;DDD2&quot;, &quot;DDD1&quot;, &quot;CCC&quot;, &quot;BBB3&quot;, &quot;BBB2&quot;, &quot;AAA2&quot;, &quot;AAA1&quot;</span></span><br><span class="line">stringCollection.stream().map(String::toUpperCase)</span><br><span class="line">                         .sorted((a, b) -&gt; b.compareTo(a)).forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<h4 id="Match-匹配"><a href="#Match-匹配" class="headerlink" title="Match 匹配"></a>Match 匹配</h4><p><code>Stream</code>提供了多种匹配操作，允许检测指定的<code>Predicate</code>是否匹配整个<code>Stream</code>。所有的匹配操作都是最终操作，并返回一个<code>boolean</code>类型的值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">boolean</span> <span class="variable">anyStartsWithA</span> <span class="operator">=</span> stringCollection.stream().anyMatch((s) -&gt; s.startsWith(<span class="string">&quot;a&quot;</span>));</span><br><span class="line">System.out.println(anyStartsWithA);      <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="type">boolean</span> <span class="variable">allStartsWithA</span> <span class="operator">=</span> stringCollection.stream().allMatch((s) -&gt; s.startsWith(<span class="string">&quot;a&quot;</span>));</span><br><span class="line">System.out.println(allStartsWithA);      <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="type">boolean</span> <span class="variable">noneStartsWithZ</span> <span class="operator">=</span> stringCollection.stream().noneMatch((s) -&gt; s.startsWith(<span class="string">&quot;z&quot;</span>));</span><br><span class="line">System.out.println(noneStartsWithZ);      <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<h4 id="Count-计数"><a href="#Count-计数" class="headerlink" title="Count 计数"></a>Count 计数</h4><p>计数是一个最终操作，返回<code>Stream</code>中元素的个数，返回值类型是<code>long</code>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">long</span> <span class="variable">startsWithB</span> <span class="operator">=</span> stringCollection.stream().filter((s) -&gt; s.startsWith(<span class="string">&quot;b&quot;</span>)).count();</span><br><span class="line">System.out.println(startsWithB);    <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+<h4 id="Reduce-规约"><a href="#Reduce-规约" class="headerlink" title="Reduce 规约"></a>Reduce 规约</h4><p>这是一个最终操作，允许通过指定的函数来将<code>stream</code>中的多个元素规约为一个元素，规越后的结果是通过<code>Optional</code>接口表示的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional&lt;String&gt; reduced = stringCollection.stream().sorted().reduce((s1, s2) -&gt; s1 + <span class="string">&quot;#&quot;</span>+ s2);</span><br><span class="line">reduced.ifPresent(System.out::println);</span><br><span class="line"><span class="comment">// &quot;aaa1#aaa2#bbb1#bbb2#bbb3#ccc#ddd1#ddd2&quot;</span></span><br></pre></td></tr></table></figure>
+<h4 id="并行Streams"><a href="#并行Streams" class="headerlink" title="并行Streams"></a>并行Streams</h4><p>前面提到过<code>Stream</code>有<strong>串行</strong>和<strong>并行</strong>两种，<code>串行Stream</code>上的操作是在一个线程中依次完成，而<code>并行Stream</code>则是在多个线程上同时执行。</p>
+<p>下面的例子展示了是如何通过<code>并行Stream</code>来提升性能：</p>
+<p>首先我们创建一个没有重复元素的大表</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> <span class="number">1000000</span>;</span><br><span class="line">List&lt;String&gt; values = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(max);</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; max; i++) &#123;</span><br><span class="line">    <span class="type">UUID</span> <span class="variable">uuid</span> <span class="operator">=</span> UUID.randomUUID();</span><br><span class="line">    values.add(uuid.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们计算一下排序这个Stream要耗时多久，串行排序：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">long</span> <span class="variable">t0</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">count</span> <span class="operator">=</span> values.stream().sorted().count();</span><br><span class="line">System.out.println(count);</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">t1</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">millis</span> <span class="operator">=</span> TimeUnit.NANOSECONDS.toMillis(t1 - t0);</span><br><span class="line">System.out.println(String.format(<span class="string">&quot;sequential sort took: %d ms&quot;</span>, millis));</span><br><span class="line"><span class="comment">// 串行耗时: 899 ms</span></span><br></pre></td></tr></table></figure>
+<p>并行排序：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">long</span> <span class="variable">t0</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">count</span> <span class="operator">=</span> values.parallelStream().sorted().count();</span><br><span class="line">System.out.println(count);</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">t1</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">millis</span> <span class="operator">=</span> TimeUnit.NANOSECONDS.toMillis(t1 - t0);</span><br><span class="line">System.out.println(String.format(<span class="string">&quot;parallel sort took: %d ms&quot;</span>, millis));</span><br><span class="line"><span class="comment">// 并行排序耗时: 472 ms 上面两个代码几乎是一样的，但是并行版的快了50%之多，唯一需要做的改动就是将stream()改为parallelStream()。</span></span><br></pre></td></tr></table></figure>
+<h4 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h4><p>前面提到过，<code>Map</code>类型不支持<code>stream</code>，不过<code>Map</code>提供了一些新的有用的方法来处理一些日常任务。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;Integer, String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    map.putIfAbsent(i, <span class="string">&quot;val&quot;</span>+ i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">map.forEach((id, val) -&gt; System.out.println(val));</span><br></pre></td></tr></table></figure>
+<p>以上代码很容易理解， <code>putIfAbsent</code> 不需要我们做额外的存在性检查，而<code>forEach</code>则接收一个<code>Consumer</code>接口来对<code>map</code>里的每一个键值对进行操作。<br>下面的例子展示了<code>map</code>上的其他有用的函数：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">map.computeIfPresent(<span class="number">3</span>, (num, val) -&gt; val + num);</span><br><span class="line">map.get(<span class="number">3</span>);             <span class="comment">// val33</span></span><br><span class="line"></span><br><span class="line">map.computeIfPresent(<span class="number">9</span>, (num, val) -&gt; <span class="literal">null</span>);</span><br><span class="line">map.containsKey(<span class="number">9</span>);     <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">map.computeIfAbsent(<span class="number">23</span>, num -&gt; <span class="string">&quot;val&quot;</span>+ num);</span><br><span class="line">map.containsKey(<span class="number">23</span>);    <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">map.computeIfAbsent(<span class="number">3</span>, num -&gt; <span class="string">&quot;bam&quot;</span>);</span><br><span class="line">map.get(<span class="number">3</span>);             <span class="comment">// val33</span></span><br></pre></td></tr></table></figure>
+<p>接下来展示如何在<code>Map</code>里删除一个键值全都匹配的项</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">map.remove(<span class="number">3</span>, <span class="string">&quot;val3&quot;</span>);</span><br><span class="line">map.get(<span class="number">3</span>);             <span class="comment">// val33</span></span><br><span class="line"></span><br><span class="line">map.remove(<span class="number">3</span>, <span class="string">&quot;val33&quot;</span>);</span><br><span class="line">map.get(<span class="number">3</span>);             <span class="comment">// null</span></span><br></pre></td></tr></table></figure>
+<p>另外一个有用的方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">map.getOrDefault(<span class="number">42</span>, <span class="string">&quot;not found&quot;</span>);  <span class="comment">// not found</span></span><br></pre></td></tr></table></figure>
+<p>对<code>Map</code>的元素做合并也变得很容易了：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">map.merge(<span class="number">9</span>, <span class="string">&quot;val9&quot;</span>, (value, newValue) -&gt; value.concat(newValue));</span><br><span class="line">map.get(<span class="number">9</span>);             <span class="comment">// val9</span></span><br><span class="line"></span><br><span class="line">map.merge(<span class="number">9</span>, <span class="string">&quot;concat&quot;</span>, (value, newValue) -&gt; value.concat(newValue));</span><br><span class="line">map.get(<span class="number">9</span>);             <span class="comment">// val9concat</span></span><br></pre></td></tr></table></figure>
+<p><code>Merge</code>做的事情是如果键名不存在则插入，否则则对原键对应的值做合并操作并重新插入到<code>map</code>中。</p>
+<h2 id="九、Date-API"><a href="#九、Date-API" class="headerlink" title="九、Date API"></a>九、Date API</h2><p><code>Java 8</code> 在包<code>java.time</code>下包含了一组全新的时间日期<code>API</code>。新的日期<code>API</code>和开源的<code>Joda-Time</code>库差不多，但又不完全一样，下面的例子展示了这组新<code>API</code>里最重要的一些部分：</p>
+<h3 id="Clock-时钟"><a href="#Clock-时钟" class="headerlink" title="Clock 时钟"></a>Clock 时钟</h3><p><code>Clock</code>类提供了访问当前日期和时间的方法，<code>Clock</code>是时区敏感的，可以用来取代 <code>System.currentTimeMillis()</code> 来获取当前的微秒数。某一个特定的时间点也可以使用<code>Instant</code>类来表示，<code>Instant</code>类也可以用来创建老的<code>java.util.Date</code>对象。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Clock</span> <span class="variable">clock</span> <span class="operator">=</span> Clock.systemDefaultZone();</span><br><span class="line"><span class="type">long</span> <span class="variable">millis</span> <span class="operator">=</span> clock.millis();</span><br><span class="line"></span><br><span class="line"><span class="type">Instant</span> <span class="variable">instant</span> <span class="operator">=</span> clock.instant();</span><br><span class="line"><span class="type">Date</span> <span class="variable">legacyDate</span> <span class="operator">=</span> Date.from(instant);   <span class="comment">// legacy java.util.Date</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Timezones-时区"><a href="#Timezones-时区" class="headerlink" title="Timezones 时区"></a>Timezones 时区</h3><p>在新<code>API</code>中时区使用<code>ZoneId</code>来表示。时区可以很方便的使用静态方法<code>of</code>来获取到。 时区定义了到<code>UTS</code>时间的时间差，在<code>Instant</code>时间点对象到本地日期对象之间转换的时候是极其重要的。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(ZoneId.getAvailableZoneIds());</span><br><span class="line"><span class="comment">// prints all available timezone ids</span></span><br><span class="line"></span><br><span class="line"><span class="type">ZoneId</span> <span class="variable">zone1</span> <span class="operator">=</span> ZoneId.of(<span class="string">&quot;Europe/Berlin&quot;</span>);</span><br><span class="line"><span class="type">ZoneId</span> <span class="variable">zone2</span> <span class="operator">=</span> ZoneId.of(<span class="string">&quot;Brazil/East&quot;</span>);</span><br><span class="line">System.out.println(zone1.getRules());</span><br><span class="line">System.out.println(zone2.getRules());</span><br><span class="line"><span class="comment">// ZoneRules[currentStandardOffset=+01:00]</span></span><br><span class="line"><span class="comment">// ZoneRules[currentStandardOffset=-03:00]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="LocalTime-本地时间"><a href="#LocalTime-本地时间" class="headerlink" title="LocalTime 本地时间"></a>LocalTime 本地时间</h3><p><code>LocalTime</code> 定义了一个没有时区信息的时间，例如 晚上10点，或者 17:30:15。下面的例子使用前面代码创建的时区创建了两个本地时间。之后比较时间并以小时和分钟为单位计算两个时间的时间差：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">LocalTime</span> <span class="variable">now1</span> <span class="operator">=</span> LocalTime.now(zone1);</span><br><span class="line"><span class="type">LocalTime</span> <span class="variable">now2</span> <span class="operator">=</span> LocalTime.now(zone2);</span><br><span class="line"></span><br><span class="line">System.out.println(now1.isBefore(now2));  <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">hoursBetween</span> <span class="operator">=</span> ChronoUnit.HOURS.between(now1, now2);</span><br><span class="line"><span class="type">long</span> <span class="variable">minutesBetween</span> <span class="operator">=</span> ChronoUnit.MINUTES.between(now1, now2);</span><br><span class="line"></span><br><span class="line">System.out.println(hoursBetween);       <span class="comment">// -3</span></span><br><span class="line">System.out.println(minutesBetween);     <span class="comment">// -239</span></span><br></pre></td></tr></table></figure>
+<p><code>LocalTime</code> 提供了多种工厂方法来简化对象的创建，包括解析时间字符串。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">LocalTime</span> <span class="variable">late</span> <span class="operator">=</span> LocalTime.of(<span class="number">23</span>, <span class="number">59</span>, <span class="number">59</span>);</span><br><span class="line">System.out.println(late);       <span class="comment">// 23:59:59</span></span><br><span class="line"></span><br><span class="line"><span class="type">DateTimeFormatter</span> <span class="variable">germanFormatter</span> <span class="operator">=</span> DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(Locale.GERMAN);</span><br><span class="line"></span><br><span class="line"><span class="type">LocalTime</span> <span class="variable">leetTime</span> <span class="operator">=</span> LocalTime.parse(<span class="string">&quot;13:37&quot;</span>, germanFormatter);</span><br><span class="line">System.out.println(leetTime);   <span class="comment">// 13:37</span></span><br></pre></td></tr></table></figure>
+<h3 id="LocalDate-本地日期"><a href="#LocalDate-本地日期" class="headerlink" title="LocalDate 本地日期"></a>LocalDate 本地日期</h3><p><code>LocalDate</code> 表示了一个确切的日期，比如 2014-03-11。该对象值是不可变的，用起来和<code>LocalTime</code>基本一致。下面的例子展示了如何给<code>Date</code>对象加减天&#x2F;月&#x2F;年。另外要注意的是这些对象是不可变的，操作返回的总是一个新实例。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">LocalDate</span> <span class="variable">today</span> <span class="operator">=</span> LocalDate.now();</span><br><span class="line"><span class="type">LocalDate</span> <span class="variable">tomorrow</span> <span class="operator">=</span> today.plus(<span class="number">1</span>, ChronoUnit.DAYS);</span><br><span class="line"><span class="type">LocalDate</span> <span class="variable">yesterday</span> <span class="operator">=</span> tomorrow.minusDays(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">LocalDate</span> <span class="variable">independenceDay</span> <span class="operator">=</span> LocalDate.of(<span class="number">2014</span>, Month.JULY, <span class="number">4</span>);</span><br><span class="line"><span class="type">DayOfWeek</span> <span class="variable">dayOfWeek</span> <span class="operator">=</span> independenceDay.getDayOfWeek();</span><br><span class="line"></span><br><span class="line">System.out.println(dayOfWeek);    <span class="comment">// FRIDAY</span></span><br></pre></td></tr></table></figure>
+<p>从字符串解析一个<code>LocalDate</code>类型和解析<code>LocalTime</code>一样简单：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">DateTimeFormatter</span> <span class="variable">germanFormatter</span> <span class="operator">=</span> DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);</span><br><span class="line"></span><br><span class="line"><span class="type">LocalDate</span> <span class="variable">xmas</span> <span class="operator">=</span> LocalDate.parse(<span class="string">&quot;24.12.2014&quot;</span>, germanFormatter);</span><br><span class="line">System.out.println(xmas);   <span class="comment">// 2014-12-24</span></span><br></pre></td></tr></table></figure>
+<h3 id="LocalDateTime-本地日期时间"><a href="#LocalDateTime-本地日期时间" class="headerlink" title="LocalDateTime 本地日期时间"></a>LocalDateTime 本地日期时间</h3><p><code>LocalDateTime</code> 同时表示了<strong>时间和日期</strong>，相当于前两节内容合并到一个对象上了。<br><code>LocalDateTime</code>和<code>LocalTime</code>还有<code>LocalDate</code>一样，都是不可变的。<code>LocalDateTime</code>提供了一些能访问具体字段的方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">LocalDateTime</span> <span class="variable">sylvester</span> <span class="operator">=</span> LocalDateTime.of(<span class="number">2014</span>, Month.DECEMBER, <span class="number">31</span>, <span class="number">23</span>, <span class="number">59</span>, <span class="number">59</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">DayOfWeek</span> <span class="variable">dayOfWeek</span> <span class="operator">=</span> sylvester.getDayOfWeek();</span><br><span class="line">System.out.println(dayOfWeek);      <span class="comment">// WEDNESDAY</span></span><br><span class="line"></span><br><span class="line"><span class="type">Month</span> <span class="variable">month</span> <span class="operator">=</span> sylvester.getMonth();</span><br><span class="line">System.out.println(month);          <span class="comment">// DECEMBER</span></span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">minuteOfDay</span> <span class="operator">=</span> sylvester.getLong(ChronoField.MINUTE_OF_DAY);</span><br><span class="line">System.out.println(minuteOfDay);    <span class="comment">// 1439</span></span><br></pre></td></tr></table></figure>
+<p>只要附加上时区信息，就可以将其转换为一个时间点<code>Instant</code>对象，<code>Instant</code>时间点对象可以很容易的转换为老式的<code>java.util.Date</code>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Instant</span> <span class="variable">instant</span> <span class="operator">=</span> sylvester.atZone(ZoneId.systemDefault()).toInstant();</span><br><span class="line"></span><br><span class="line"><span class="type">Date</span> <span class="variable">legacyDate</span> <span class="operator">=</span> Date.from(instant);</span><br><span class="line">System.out.println(legacyDate);     <span class="comment">// Wed Dec 31 23:59:59 CET 2014</span></span><br></pre></td></tr></table></figure>
+<p>格式化<code>LocalDateTime</code>和格式化时间和日期一样的，除了使用预定义好的格式外，我们也可以自己定义格式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">DateTimeFormatter</span> <span class="variable">formatter</span> <span class="operator">=</span> DateTimeFormatter.ofPattern(<span class="string">&quot;MMM dd, yyyy - HH:mm&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">LocalDateTime</span> <span class="variable">parsed</span> <span class="operator">=</span> LocalDateTime.parse(<span class="string">&quot;Nov 03, 2014 - 07:13&quot;</span>, formatter);</span><br><span class="line">Stringstring= formatter.format(parsed);</span><br><span class="line">System.out.println(string);     <span class="comment">// Nov 03, 2014 - 07:13</span></span><br></pre></td></tr></table></figure>
+<p>和<code>java.text.NumberFormat</code>不一样的是新版的<code>DateTimeFormatter</code>是不可变的，所以它是线程安全的。<br><a href="http://download.java.net/jdk8/docs/api/java/time/format/DateTimeFormatter.html">关于时间日期格式的详细信息</a></p>
+<h2 id="十、Annotation-注解"><a href="#十、Annotation-注解" class="headerlink" title="十、Annotation 注解"></a>十、Annotation 注解</h2><p>在<code>Java 8</code>中支持多重注解了，先看个例子来理解一下是什么意思。首先定义一个包装类<code>Hints</code>注解用来放置一组具体的<code>Hint</code>注解：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@interfaceHints</span>&#123;</span><br><span class="line">    Hint[] value();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repeatable(Hints.class)</span></span><br><span class="line"><span class="meta">@interfaceHint</span>&#123;</span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Java 8</code>允许我们把同一个类型的注解使用多次，只需要给该注解标注一下<code>@Repeatable</code>即可。<br>例 1: 使用包装类当容器来存多个注解（老方法）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Hints(&#123;@Hint(&quot;hint1&quot;), @Hint(&quot;hint2&quot;)&#125;)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>例 2：使用多重注解（新方法）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Hint(&quot;hint1&quot;)</span></span><br><span class="line"><span class="meta">@Hint(&quot;hint2&quot;)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>第二个例子里<code>java</code>编译器会隐性的帮你定义好<code>@Hints</code>注解，了解这一点有助于你用反射来获取这些信息：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Hint</span> <span class="variable">hint</span> <span class="operator">=</span> Person.class.getAnnotation(Hint.class);</span><br><span class="line">System.out.println(hint);                   <span class="comment">// null</span></span><br><span class="line"></span><br><span class="line"><span class="type">Hints</span> <span class="variable">hints1</span> <span class="operator">=</span> Person.class.getAnnotation(Hints.class);</span><br><span class="line">System.out.println(hints1.value().length);  <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line">Hint[] hints2 = Person.class.getAnnotationsByType(Hint.class);</span><br><span class="line">System.out.println(hints2.length);          <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<p>即便我们没有在<code>Person</code>类上定义<code>@Hints</code>注解，我们还是可以通过 <code>getAnnotation(Hints.class)</code> 来获取 <code>@Hints</code>注解，更加方便的方法是使用 <code>getAnnotationsByType</code> 可以直接获取到所有的<code>@Hint</code>注解。另外<code>Java 8</code>的注解还增加到两种新的<code>target</code>上了：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE_PARAMETER, ElementType.TYPE_USE&#125;)</span></span><br><span class="line"><span class="meta">@interfaceMyAnnotation</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>关于<code>Java 8</code>的新特性就写到这了，肯定还有更多的特性等待发掘。<code>JDK 1.8</code>里还有很多很有用的东西，比如<code>Arrays.parallelSort</code>, <code>StampedLock</code>和<code>CompletableFuture</code>等等。</p>
+]]></content>
+      <categories>
+        <category>后端</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux 命令</title>
+    <url>/2023/11/13/Linux-%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h1 id="Linux-操作必备-150-个命令"><a href="#Linux-操作必备-150-个命令" class="headerlink" title="Linux 操作必备 150 个命令"></a>Linux 操作必备 150 个命令</h1><p><code>linux 命令</code>是对 <code>Linux</code> 系统进行管理的命令。对于 <code>Linux</code><br>系统来说，无论是中央处理器、内存、磁盘驱动器、键盘、鼠标，还是用户等都是文件， <code>Linux</code><br>系统管理的命令是它正常运行的核心，与之前的 <code>DOS</code> 命令类似。</p>
+<p><code>linux 命令</code>在系统中有两种类型：<code>内置 Shell 命令</code>和 <code>Linux 命令</code>。</p>
+<h2 id="线上查询及帮助命令"><a href="#线上查询及帮助命令" class="headerlink" title="线上查询及帮助命令"></a>线上查询及帮助命令</h2><p>线上查询及帮助命令 (2 个)</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>man</td>
+<td>查看命令帮助，命令的词典，更复杂的还有 info，但不常用。</td>
+</tr>
+<tr>
+<td>help</td>
+<td>查看 Linux 内置命令的帮助，比如 cd 命令。</td>
+</tr>
+</tbody></table>
+<h2 id="文件和目录操作命令"><a href="#文件和目录操作命令" class="headerlink" title="文件和目录操作命令"></a>文件和目录操作命令</h2><p>文件和目录操作命令 (18 个)</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ls</td>
+<td>全拼 list，功能是列出目录的内容及其内容属性信息。</td>
+</tr>
+<tr>
+<td>cd</td>
+<td>全拼 change directory，功能是从当前工作目录切换到指定的工作目录。</td>
+</tr>
+<tr>
+<td>cp</td>
+<td>全拼 copy，其功能为复制文件或目录。</td>
+</tr>
+<tr>
+<td>find</td>
+<td>查找的意思，用于查找目录及目录下的文件。</td>
+</tr>
+<tr>
+<td>mkdir</td>
+<td>全拼 make directories，其功能是创建目录。</td>
+</tr>
+<tr>
+<td>mv</td>
+<td>全拼 move，其功能是移动或重命名文件。</td>
+</tr>
+<tr>
+<td>pwd</td>
+<td>全拼 print working directory，其功能是显示当前工作目录的绝对路径。</td>
+</tr>
+<tr>
+<td>rename</td>
+<td>用于重命名文件。</td>
+</tr>
+<tr>
+<td>rm</td>
+<td>全拼 remove，其功能是删除一个或多个文件或目录。</td>
+</tr>
+<tr>
+<td>rmdir</td>
+<td>全拼 remove empty directories，功能是删除空目录。</td>
+</tr>
+<tr>
+<td>touch</td>
+<td>创建新的空文件，改变已有文件的时间戳属性。</td>
+</tr>
+<tr>
+<td>tree</td>
+<td>功能是以树形结构显示目录下的内容。</td>
+</tr>
+<tr>
+<td>basename</td>
+<td>显示文件名或目录名。</td>
+</tr>
+<tr>
+<td>dirname</td>
+<td>显示文件或目录路径。</td>
+</tr>
+<tr>
+<td>chattr</td>
+<td>改变文件的扩展属性。</td>
+</tr>
+<tr>
+<td>lsattr</td>
+<td>查看文件扩展属性。</td>
+</tr>
+<tr>
+<td>file</td>
+<td>显示文件的类型。</td>
+</tr>
+<tr>
+<td>md5sum</td>
+<td>计算和校验文件的 MD5 值。</td>
+</tr>
+</tbody></table>
+<h2 id="查看文件及内容处理命令"><a href="#查看文件及内容处理命令" class="headerlink" title="查看文件及内容处理命令"></a>查看文件及内容处理命令</h2><p>查看文件及内容处理命令（21 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cat</td>
+<td>全拼 concatenate，功能是用于连接多个文件并且打印到屏幕输出或重定向到指定文件中。</td>
+</tr>
+<tr>
+<td>tac</td>
+<td>tac 是 cat 的反向拼写，因此命令的功能为反向显示文件内容。</td>
+</tr>
+<tr>
+<td>more</td>
+<td>分页显示文件内容。</td>
+</tr>
+<tr>
+<td>less</td>
+<td>分页显示文件内容，more 命令的相反用法。</td>
+</tr>
+<tr>
+<td>head</td>
+<td>显示文件内容的头部。</td>
+</tr>
+<tr>
+<td>tail</td>
+<td>显示文件内容的尾部。</td>
+</tr>
+<tr>
+<td>cut</td>
+<td>将文件的每一行按指定分隔符分割并输出。</td>
+</tr>
+<tr>
+<td>split</td>
+<td>分割文件为不同的小片段。</td>
+</tr>
+<tr>
+<td>paste</td>
+<td>按行合并文件内容。</td>
+</tr>
+<tr>
+<td>sort</td>
+<td>对文件的文本内容排序。</td>
+</tr>
+<tr>
+<td>uniq</td>
+<td>去除重复行。oldboy</td>
+</tr>
+<tr>
+<td>wc</td>
+<td>统计文件的行数、单词数或字节数。</td>
+</tr>
+<tr>
+<td>iconv</td>
+<td>转换文件的编码格式。</td>
+</tr>
+<tr>
+<td>dos2unix</td>
+<td>将 DOS 格式文件转换成 UNIX 格式。</td>
+</tr>
+<tr>
+<td>diff</td>
+<td>全拼 difference，比较文件的差异，常用于文本文件。</td>
+</tr>
+<tr>
+<td>vimdiff</td>
+<td>命令行可视化文件比较工具，常用于文本文件。</td>
+</tr>
+<tr>
+<td>rev</td>
+<td>反向输出文件内容。</td>
+</tr>
+<tr>
+<td>grep&#x2F;egrep</td>
+<td>过滤字符串，三剑客老三。</td>
+</tr>
+<tr>
+<td>join</td>
+<td>按两个文件的相同字段合并。</td>
+</tr>
+<tr>
+<td>tr</td>
+<td>替换或删除字符。</td>
+</tr>
+<tr>
+<td>vi&#x2F;vim</td>
+<td>命令行文本编辑器。</td>
+</tr>
+</tbody></table>
+<h2 id="文件压缩及解压缩命令"><a href="#文件压缩及解压缩命令" class="headerlink" title="文件压缩及解压缩命令"></a>文件压缩及解压缩命令</h2><p>文件压缩及解压缩命令（4 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tar</td>
+<td>打包压缩。oldboy</td>
+</tr>
+<tr>
+<td>unzip</td>
+<td>解压文件。</td>
+</tr>
+<tr>
+<td>gzip</td>
+<td>gzip 压缩工具。</td>
+</tr>
+<tr>
+<td>zip</td>
+<td>压缩工具。</td>
+</tr>
+</tbody></table>
+<h2 id="信息显示命令"><a href="#信息显示命令" class="headerlink" title="信息显示命令"></a>信息显示命令</h2><p>信息显示命令（11 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>uname</td>
+<td>显示操作系统相关信息的命令。</td>
+</tr>
+<tr>
+<td>hostname</td>
+<td>显示或者设置当前系统的主机名。</td>
+</tr>
+<tr>
+<td>dmesg</td>
+<td>显示开机信息，用于诊断系统故障。</td>
+</tr>
+<tr>
+<td>uptime</td>
+<td>显示系统运行时间及负载。</td>
+</tr>
+<tr>
+<td>stat</td>
+<td>显示文件或文件系统的状态。</td>
+</tr>
+<tr>
+<td>du</td>
+<td>计算磁盘空间使用情况。</td>
+</tr>
+<tr>
+<td>df</td>
+<td>报告文件系统磁盘空间的使用情况。</td>
+</tr>
+<tr>
+<td>top</td>
+<td>实时显示系统资源使用情况。</td>
+</tr>
+<tr>
+<td>free</td>
+<td>查看系统内存。</td>
+</tr>
+<tr>
+<td>date</td>
+<td>显示与设置系统时间。</td>
+</tr>
+<tr>
+<td>cal</td>
+<td>查看日历等时间信息。</td>
+</tr>
+</tbody></table>
+<h2 id="搜索文件命令"><a href="#搜索文件命令" class="headerlink" title="搜索文件命令"></a>搜索文件命令</h2><p>搜索文件命令（4 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>which</td>
+<td>查找二进制命令，按环境变量 PATH 路径查找。</td>
+</tr>
+<tr>
+<td>find</td>
+<td>从磁盘遍历查找文件或目录。</td>
+</tr>
+<tr>
+<td>whereis</td>
+<td>查找二进制命令，按环境变量 PATH 路径查找。</td>
+</tr>
+<tr>
+<td>locate</td>
+<td>从数据库 (&#x2F;var&#x2F;lib&#x2F;mlocate&#x2F;mlocate.db) 查找命令，使用 updatedb 更新库。</td>
+</tr>
+</tbody></table>
+<h2 id="用户管理命令"><a href="#用户管理命令" class="headerlink" title="用户管理命令"></a>用户管理命令</h2><p>用户管理命令（10 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>useradd</td>
+<td>添加用户。</td>
+</tr>
+<tr>
+<td>usermod</td>
+<td>修改系统已经存在的用户属性。</td>
+</tr>
+<tr>
+<td>userdel</td>
+<td>删除用户。</td>
+</tr>
+<tr>
+<td>groupadd</td>
+<td>添加用户组。</td>
+</tr>
+<tr>
+<td>passwd</td>
+<td>修改用户密码。</td>
+</tr>
+<tr>
+<td>chage</td>
+<td>修改用户密码有效期限。</td>
+</tr>
+<tr>
+<td>id</td>
+<td>查看用户的 uid,gid 及归属的用户组。</td>
+</tr>
+<tr>
+<td>su</td>
+<td>切换用户身份。</td>
+</tr>
+<tr>
+<td>visudo</td>
+<td>编辑 &#x2F; etc&#x2F;sudoers 文件的专属命令。</td>
+</tr>
+<tr>
+<td>sudo</td>
+<td>以另外一个用户身份（默认 root 用户）执行事先在 sudoers 文件允许的命令。</td>
+</tr>
+</tbody></table>
+<h2 id="基础网络操作命令"><a href="#基础网络操作命令" class="headerlink" title="基础网络操作命令"></a>基础网络操作命令</h2><p>基础网络操作命令（11 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>telnet</td>
+<td>使用 TELNET 协议远程登录。</td>
+</tr>
+<tr>
+<td>ssh</td>
+<td>使用 SSH 加密协议远程登录。</td>
+</tr>
+<tr>
+<td>scp</td>
+<td>全拼 secure copy，用于不同主机之间复制文件。</td>
+</tr>
+<tr>
+<td>wget</td>
+<td>命令行下载文件。</td>
+</tr>
+<tr>
+<td>ping</td>
+<td>测试主机之间网络的连通性。</td>
+</tr>
+<tr>
+<td>route</td>
+<td>显示和设置 linux 系统的路由表。</td>
+</tr>
+<tr>
+<td>ifconfig</td>
+<td>查看、配置、启用或禁用网络接口的命令。</td>
+</tr>
+<tr>
+<td>ifup</td>
+<td>启动网卡。</td>
+</tr>
+<tr>
+<td>ifdown</td>
+<td>关闭网卡。</td>
+</tr>
+<tr>
+<td>netstat</td>
+<td>查看网络状态。</td>
+</tr>
+<tr>
+<td>ss</td>
+<td>查看网络状态。</td>
+</tr>
+</tbody></table>
+<h2 id="深入网络操作命令"><a href="#深入网络操作命令" class="headerlink" title="深入网络操作命令"></a>深入网络操作命令</h2><p>深入网络操作命令（9 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nmap</td>
+<td>网络扫描命令。</td>
+</tr>
+<tr>
+<td>lsof</td>
+<td>全名 list open files，也就是列举系统中已经被打开的文件。</td>
+</tr>
+<tr>
+<td>mail</td>
+<td>发送和接收邮件。</td>
+</tr>
+<tr>
+<td>mutt</td>
+<td>邮件管理命令。</td>
+</tr>
+<tr>
+<td>nslookup</td>
+<td>交互式查询互联网 DNS 服务器的命令。</td>
+</tr>
+<tr>
+<td>dig</td>
+<td>查找 DNS 解析过程。</td>
+</tr>
+<tr>
+<td>host</td>
+<td>查询 DNS 的命令。</td>
+</tr>
+<tr>
+<td>traceroute</td>
+<td>追踪数据传输路由状况。</td>
+</tr>
+<tr>
+<td>tcpdump</td>
+<td>命令行的抓包工具。</td>
+</tr>
+</tbody></table>
+<h2 id="有关磁盘与文件系统的命令"><a href="#有关磁盘与文件系统的命令" class="headerlink" title="有关磁盘与文件系统的命令"></a>有关磁盘与文件系统的命令</h2><p>有关磁盘与文件系统的命令（16 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mount</td>
+<td>挂载文件系统。</td>
+</tr>
+<tr>
+<td>umount</td>
+<td>卸载文件系统。</td>
+</tr>
+<tr>
+<td>fsck</td>
+<td>检查并修复 Linux 文件系统。</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>转换或复制文件。</td>
+</tr>
+<tr>
+<td>dumpe2fs</td>
+<td>导出 ext2&#x2F;ext3&#x2F;ext4 文件系统信息。</td>
+</tr>
+<tr>
+<td>dump</td>
+<td>ext2&#x2F;3&#x2F;4 文件系统备份工具。</td>
+</tr>
+<tr>
+<td>fdisk</td>
+<td>磁盘分区命令，适用于 2TB 以下磁盘分区。</td>
+</tr>
+<tr>
+<td>parted</td>
+<td>磁盘分区命令，没有磁盘大小限制，常用于 2TB 以下磁盘分区。</td>
+</tr>
+<tr>
+<td>mkfs</td>
+<td>格式化创建 Linux 文件系统。</td>
+</tr>
+<tr>
+<td>partprobe</td>
+<td>更新内核的硬盘分区表信息。</td>
+</tr>
+<tr>
+<td>e2fsck</td>
+<td>检查 ext2&#x2F;ext3&#x2F;ext4 类型文件系统。</td>
+</tr>
+<tr>
+<td>mkswap</td>
+<td>创建 Linux 交换分区。</td>
+</tr>
+<tr>
+<td>swapon</td>
+<td>启用交换分区。</td>
+</tr>
+<tr>
+<td>swapoff</td>
+<td>关闭交换分区。</td>
+</tr>
+<tr>
+<td>sync</td>
+<td>将内存缓冲区内的数据写入磁盘。</td>
+</tr>
+<tr>
+<td>resize2fs</td>
+<td>调整 ext2&#x2F;ext3&#x2F;ext4 文件系统大小。</td>
+</tr>
+</tbody></table>
+<h2 id="系统权限及用户授权相关命令"><a href="#系统权限及用户授权相关命令" class="headerlink" title="系统权限及用户授权相关命令"></a>系统权限及用户授权相关命令</h2><p>系统权限及用户授权相关命令（4 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>chmod</td>
+<td>改变文件或目录权限。</td>
+</tr>
+<tr>
+<td>chown</td>
+<td>改变文件或目录的属主和属组。</td>
+</tr>
+<tr>
+<td>chgrp</td>
+<td>更改文件用户组。</td>
+</tr>
+<tr>
+<td>umask</td>
+<td>显示或设置权限掩码。</td>
+</tr>
+</tbody></table>
+<h2 id="查看系统用户登陆信息的命令"><a href="#查看系统用户登陆信息的命令" class="headerlink" title="查看系统用户登陆信息的命令"></a>查看系统用户登陆信息的命令</h2><p>查看系统用户登陆信息的命令（7 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>whoami</td>
+<td>显示当前有效的用户名称，相当于执行 id -un 命令。</td>
+</tr>
+<tr>
+<td>who</td>
+<td>显示目前登录系统的用户信息。</td>
+</tr>
+<tr>
+<td>w</td>
+<td>显示已经登陆系统的用户列表，并显示用户正在执行的指令。</td>
+</tr>
+<tr>
+<td>last</td>
+<td>显示登入系统的用户。</td>
+</tr>
+<tr>
+<td>lastlog</td>
+<td>显示系统中所有用户最近一次登录信息。</td>
+</tr>
+<tr>
+<td>users</td>
+<td>显示当前登录系统的所有用户的用户列表。</td>
+</tr>
+<tr>
+<td>finger</td>
+<td>查找并显示用户信息。</td>
+</tr>
+</tbody></table>
+<h2 id="内置命令及其它"><a href="#内置命令及其它" class="headerlink" title="内置命令及其它"></a>内置命令及其它</h2><p>内置命令及其它（19 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>echo</td>
+<td>打印变量，或直接输出指定的字符串</td>
+</tr>
+<tr>
+<td>printf</td>
+<td>将结果格式化输出到标准输出。</td>
+</tr>
+<tr>
+<td>rpm</td>
+<td>管理 rpm 包的命令。</td>
+</tr>
+<tr>
+<td>yum</td>
+<td>自动化简单化地管理 rpm 包的命令。</td>
+</tr>
+<tr>
+<td>watch</td>
+<td>周期性的执行给定的命令，并将命令的输出以全屏方式显示。</td>
+</tr>
+<tr>
+<td>alias</td>
+<td>设置系统别名。</td>
+</tr>
+<tr>
+<td>unalias</td>
+<td>取消系统别名。</td>
+</tr>
+<tr>
+<td>date</td>
+<td>查看或设置系统时间。</td>
+</tr>
+<tr>
+<td>clear</td>
+<td>清除屏幕，简称清屏。</td>
+</tr>
+<tr>
+<td>history</td>
+<td>查看命令执行的历史纪录。</td>
+</tr>
+<tr>
+<td>eject</td>
+<td>弹出光驱。</td>
+</tr>
+<tr>
+<td>time</td>
+<td>计算命令执行时间。</td>
+</tr>
+<tr>
+<td>nc</td>
+<td>功能强大的网络工具。</td>
+</tr>
+<tr>
+<td>xargs</td>
+<td>将标准输入转换成命令行参数。</td>
+</tr>
+<tr>
+<td>exec</td>
+<td>调用并执行指令的命令。</td>
+</tr>
+<tr>
+<td>export</td>
+<td>设置或者显示环境变量。</td>
+</tr>
+<tr>
+<td>unset</td>
+<td>删除变量或函数。</td>
+</tr>
+<tr>
+<td>type</td>
+<td>用于判断另外一个命令是否是内置命令。</td>
+</tr>
+<tr>
+<td>bc</td>
+<td>命令行科学计算器</td>
+</tr>
+</tbody></table>
+<h2 id="系统管理与性能监视命令"><a href="#系统管理与性能监视命令" class="headerlink" title="系统管理与性能监视命令"></a>系统管理与性能监视命令</h2><p>系统管理与性能监视命令 (9 个)</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>chkconfig</td>
+<td>管理 Linux 系统开机启动项。</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>虚拟内存统计。</td>
+</tr>
+<tr>
+<td>mpstat</td>
+<td>显示各个可用 CPU 的状态统计。</td>
+</tr>
+<tr>
+<td>iostat</td>
+<td>统计系统 IO。</td>
+</tr>
+<tr>
+<td>sar</td>
+<td>全面地获取系统的 CPU、运行队列、磁盘 I&#x2F;O、分页（交换区）、内存、 CPU 中断和网络等性能数据。</td>
+</tr>
+<tr>
+<td>ipcs</td>
+<td>用于报告 Linux 中进程间通信设施的状态，显示的信息包括消息列表、共享内存和信号量的信息。</td>
+</tr>
+<tr>
+<td>ipcrm</td>
+<td>用来删除一个或更多的消息队列、信号量集或者共享内存标识。</td>
+</tr>
+<tr>
+<td>strace</td>
+<td>用于诊断、调试 Linux 用户空间跟踪器。我们用它来监控用户空间进程和内核的交互，比如系统调用、信号传递、进程状态变更等。</td>
+</tr>
+<tr>
+<td>ltrace</td>
+<td>命令会跟踪进程的库函数调用, 它会显现出哪个库函数被调用。</td>
+</tr>
+</tbody></table>
+<h2 id="关机-重启-注销和查看系统信息的命令"><a href="#关机-重启-注销和查看系统信息的命令" class="headerlink" title="关机 &#x2F; 重启 &#x2F; 注销和查看系统信息的命令"></a>关机 &#x2F; 重启 &#x2F; 注销和查看系统信息的命令</h2><p>关机 &#x2F; 重启 &#x2F; 注销和查看系统信息的命令（6 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>shutdown</td>
+<td>关机。</td>
+</tr>
+<tr>
+<td>halt</td>
+<td>关机。</td>
+</tr>
+<tr>
+<td>poweroff</td>
+<td>关闭电源。</td>
+</tr>
+<tr>
+<td>logout</td>
+<td>退出当前登录的 Shell。</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>退出当前登录的 Shell。</td>
+</tr>
+<tr>
+<td>Ctrl+d</td>
+<td>退出当前登录的 Shell 的快捷键。</td>
+</tr>
+</tbody></table>
+<h2 id="进程管理相关命令"><a href="#进程管理相关命令" class="headerlink" title="进程管理相关命令"></a>进程管理相关命令</h2><p>进程管理相关命令（15 个）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bg</td>
+<td>将一个在后台暂停的命令，变成继续执行 （在后台执行）。</td>
+</tr>
+<tr>
+<td>fg</td>
+<td>将后台中的命令调至前台继续运行。</td>
+</tr>
+<tr>
+<td>jobs</td>
+<td>查看当前有多少在后台运行的命令。</td>
+</tr>
+<tr>
+<td>kill</td>
+<td>终止进程。</td>
+</tr>
+<tr>
+<td>killall</td>
+<td>通过进程名终止进程。</td>
+</tr>
+<tr>
+<td>pkill</td>
+<td>通过进程名终止进程。</td>
+</tr>
+<tr>
+<td>crontab</td>
+<td>定时任务命令。</td>
+</tr>
+<tr>
+<td>ps</td>
+<td>显示进程的快照。</td>
+</tr>
+<tr>
+<td>pstree</td>
+<td>树形显示进程。</td>
+</tr>
+<tr>
+<td>nice&#x2F;renice</td>
+<td>调整程序运行的优先级。</td>
+</tr>
+<tr>
+<td>nohup</td>
+<td>忽略挂起信号运行指定的命令。</td>
+</tr>
+<tr>
+<td>pgrep</td>
+<td>查找匹配条件的进程。</td>
+</tr>
+<tr>
+<td>runlevel</td>
+<td>查看系统当前运行级别。</td>
+</tr>
+<tr>
+<td>init</td>
+<td>切换运行级别。</td>
+</tr>
+<tr>
+<td>service</td>
+<td>启动、停止、重新启动和关闭系统服务，还可以显示所有系统服务的当前状态。</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java8 处理 NPE</title>
+    <url>/2023/11/13/Java8%E5%A4%84%E7%90%86NPE/</url>
+    <content><![CDATA[<h1 id="Java8-处理-NPE"><a href="#Java8-处理-NPE" class="headerlink" title="Java8 处理 NPE"></a>Java8 处理 NPE</h1><p>假设我们有两个类,他们的 UML 类图如下图所示:</p>
+<p><img src="https://s2.loli.net/2022/10/10/rqJ8CfTmxSwF7hg.png" alt="image.png"></p>
+<h2 id="在这种情况下-有如下代码"><a href="#在这种情况下-有如下代码" class="headerlink" title="在这种情况下,有如下代码"></a>在这种情况下,有如下代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">user.getAddress().getProvince();</span><br></pre></td></tr></table></figure>
+
+<p>这种写法,在<code>user</code>为<code>null</code>时,是有可能报<code>NullPointerException</code>异常的。为了解决这个问题,于是采用下面的写法:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (user != <span class="literal">null</span>) &#123;</span><br><span class="line">  <span class="type">Address</span> <span class="variable">address</span> <span class="operator">=</span> user.getAddress();</span><br><span class="line">  <span class="keyword">if</span> (address != <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="type">String</span> <span class="variable">province</span> <span class="operator">=</span> address.getProvince();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种写法是比较丑陋的,为了避免上述丑陋的写法,让丑陋的设计变得优雅。<code>JAVA8</code>提供了<code>Optional</code>类来优化这种写法,接下来进行详细说明.</p>
+<h2 id="API-介绍"><a href="#API-介绍" class="headerlink" title="API 介绍"></a>API 介绍</h2><p>先介绍一下<code>API</code>,与其他文章不同的是,本文采取类比的方式来讲,同时结合源码。而不像其他文章一样,一个个<code>API</code>罗列出来,让人找不到重点。</p>
+<h3 id="1、Optional-T-value-empty-of-T-value-ofNullable-T-value"><a href="#1、Optional-T-value-empty-of-T-value-ofNullable-T-value" class="headerlink" title="1、Optional(T value),empty(),of(T value),ofNullable(T value)"></a>1、<code>Optional(T value)</code>,<code>empty(),of(T value)</code>,<code>ofNullable(T value)</code></h3><p>这四个函数之间具有相关性,因此放在一组进行记忆。</p>
+<p>先说明一下,<code>Optional(T value)</code>,即<strong>构造函数</strong>,它是<code>private</code>权限的,不能由外部调用的。其余三个函数是<code>public</code>权限,供我们所调用。</p>
+<p>那么,<code>Optional</code><br>的本质,就是内部储存了一个真实的值,在构造的时候,就直接判断其值是否为空。好吧,这么说还是比较抽象。直接上<code>Optional(T value)</code><br>构造函数的源码,如下图所示:</p>
+<p><img src="https://s2.loli.net/2022/10/10/fHow65q8cJ4KjUn.png" alt="8892de3f99860f0165b43b939577c8e4.png"></p>
+<p>那么,<code>of(T value)</code>的源码如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Optional&lt;T&gt; <span class="title function_">of</span><span class="params">(T value)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Optional</span>&lt;&gt;(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说<code>of(T value)</code>函数内部调用了构造函数<code>Optional(T value)</code>。根据构造函数的源码我们可以得出两个结论:</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 通过<code>of(T value)</code>函数所构造出的<code>Optional</code>对象,当<code>Value</code>值为空时,依然会报<code>NullPointerException</code>。</li>
+<li><input checked="" disabled="" type="checkbox"> 通过<code>of(T value)</code>函数所构造出的<code>Optional</code>对象,当<code>Value</code>值不为空时,能正常构造<code>Optional</code>对象。</li>
+</ul>
+<p>除此之外呢,<code>Optional</code>类内部还维护一个<code>value</code>为<code>null</code>的对象,大概就是长下面这样的:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Optional</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="comment">//省略....</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Optional&lt;?&gt; EMPTY = <span class="keyword">new</span> <span class="title class_">Optional</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Optional</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.value = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//省略...</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span>&lt;T&gt; Optional&lt;T&gt; <span class="title function_">empty</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    Optional&lt;T&gt; t = (Optional&lt;T&gt;) EMPTY;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么,<code>empty()</code>的作用就是返回<code>EMPTY</code>对象。</p>
+<p>好了铺垫了这么多,可以说<code>ofNullable(T value)</code>的作用了,上源码:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Optional&lt;T&gt; <span class="title function_">ofNullable</span><span class="params">(T value)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> value == <span class="literal">null</span> ? empty() : of(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>好吧,大家应该都看得懂什么意思了。相比较<code>of(T value)</code>的区别就是,当<code>value</code>值为<code>null</code>时,<code>of(T value)</code><br>会报<code>NullPointerException</code>异常；<code>ofNullable(T value)</code>不会<code>throw Exception</code>,<code>ofNullable(T value)</code>直接返回一个<code>EMPTY</code>对象。</p>
+<p>那是不是意味着,我们在项目中只用<code>ofNullable</code>函数而不用 <code>of</code> 函数呢?</p>
+<p>不是的,一个东西存在那么自然有存在的价值。当我们在运行过程中,不想隐藏<code>NullPointerException</code><br>。而是要立即报告,这种情况下就用<code>Of</code>函数。但是不得不承认,这样的场景真的很少。</p>
+<h3 id="2、orElse-T-other-orElseGet-Supplier-other-和orElseThrow-Supplier-exceptionSupplier"><a href="#2、orElse-T-other-orElseGet-Supplier-other-和orElseThrow-Supplier-exceptionSupplier" class="headerlink" title="2、orElse(T other),orElseGet(Supplier&lt;? extends T&gt; other)和orElseThrow(Supplier&lt;? extends X&gt; exceptionSupplier)"></a>2、<code>orElse(T other),orElseGet(Supplier&lt;? extends T&gt; other)</code>和<code>orElseThrow(Supplier&lt;? extends X&gt; exceptionSupplier)</code></h3><p>这三个函数放一组进行记忆,都是在构造函数传入的<code>value</code>值为<code>null</code>时,进行调用的。<code>orElse</code>和<code>orElseGet</code><br>的用法如下所示,相当于<code>value</code>值为<code>null</code>时,给予一个默认值:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">  user = Optional.ofNullable(user).orElse(createUser());</span><br><span class="line">  user = Optional.ofNullable(user).orElseGet(() -&gt; createUser());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> User <span class="title function_">createUser</span><span class="params">()</span>&#123;</span><br><span class="line">  <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">  user.setName(<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数的区别：当<code>user</code>值不为<code>null</code>时,<code>orElse</code>函数依然会执行<code>createUser()</code>方法,而<code>orElseGet</code><br>函数并不会执行<code>createUser()</code>方法,大家可自行测试。</p>
+<p>至于<code>orElseThrow</code>,就是<code>value</code>值为<code>null</code>时,直接抛一个异常出去,用法如下所示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">Optional.ofNullable(user).orElseThrow(()-&gt;<span class="keyword">new</span> <span class="title class_">Exception</span>(<span class="string">&quot;用户不存在&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、map-Function-mapper-和flatMap-Function-mapper"><a href="#3、map-Function-mapper-和flatMap-Function-mapper" class="headerlink" title="3、map(Function&lt;? super T, ? extends U&gt; mapper)和flatMap(Function&lt;? super T, Optional&lt;U&gt;&gt; mapper)"></a>3、<code>map(Function&lt;? super T, ? extends U&gt; mapper)</code>和<code>flatMap(Function&lt;? super T, Optional&lt;U&gt;&gt; mapper)</code></h3><p>这两个函数放在一组记忆,这两个函数做的是&#x3D;&#x3D;转换值的操作&#x3D;&#x3D;。</p>
+<p>源码如下:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Optional</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="comment">//省略....</span></span><br><span class="line">  <span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title function_">map</span><span class="params">(Function&lt;? <span class="built_in">super</span> T, ? extends U&gt; mapper)</span> &#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> empty();</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.ofNullable(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//省略...</span></span><br><span class="line">  <span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title function_">flatMap</span><span class="params">(Function&lt;? <span class="built_in">super</span> T, Optional&lt;U&gt;&gt; mapper)</span> &#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent()) &#123;</span><br><span class="line">      <span class="keyword">return</span> empty();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> Objects.requireNonNull(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数,在函数体上没什么区别。唯一区别的就是入参:</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> map：<code>map</code>函数所接受的入参类型为<code>Function&lt;? super T, ? extends U&gt;</code>;</li>
+<li><input checked="" disabled="" type="checkbox"> flapMap：而<code>flapMap</code>的入参类型为<code>Function&lt;? super T, Optional&lt;U&gt;&gt;</code>。</li>
+</ul>
+<p>在具体用法上,对于<code>map</code>而言：</p>
+<p>如果<code>User</code>结构是下面这样的</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这时候取<code>name</code>的写法如下所示</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">city</span> <span class="operator">=</span> Optional.ofNullable(user).map(u-&gt; u.getName()).get();</span><br></pre></td></tr></table></figure>
+
+<p>对于<code>flatMap</code>而言:<br>如果<code>User</code>结构是下面这样的</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">public</span> Optional&lt;String&gt; <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Optional.ofNullable(name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这时候取<code>name</code>的写法如下所示:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">city</span> <span class="operator">=</span> Optional.ofNullable(user).flatMap(u-&gt; u.getName()).get();</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、isPresent-和ifPresent-Consumer-consumer"><a href="#4、isPresent-和ifPresent-Consumer-consumer" class="headerlink" title="4、isPresent()和ifPresent(Consumer&lt;? super T&gt; consumer)"></a>4、<code>isPresent()</code>和<code>ifPresent(Consumer&lt;? super T&gt; consumer)</code></h3><p>这两个函数放在一起记忆,<code>isPresent</code>即判断<code>value</code>值是否为空,而<code>ifPresent</code>就是在<code>value</code>值不为空时,做一些操作。</p>
+<p>这两个函数的源码如下:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Optional</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="comment">// 省略....</span></span><br><span class="line">  <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isPresent</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> value != <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 省略...</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ifPresent</span><span class="params">(Consumer&lt;? <span class="built_in">super</span> T&gt; consumer)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="literal">null</span>) &#123;</span><br><span class="line">      consumer.accept(value);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要额外说明的是,大家千万不要把</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (user != <span class="literal">null</span>)&#123;</span><br><span class="line">  <span class="comment">// <span class="doctag">TODO:</span> do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>给写成</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> Optional.ofNullable(user);</span><br><span class="line"><span class="keyword">if</span> (Optional.isPresent())&#123;</span><br><span class="line">  <span class="comment">// <span class="doctag">TODO:</span> do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为这样写,代码结构依然丑陋。</p>
+<p>至于<code>ifPresent(Consumer&lt;? super T&gt; consumer)</code>,用法也很简单,如下所示:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.ofNullable(user).ifPresent(u-&gt;&#123;</span><br><span class="line">  <span class="comment">// <span class="doctag">TODO:</span> do something</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="5、filter-Predicate-predicate"><a href="#5、filter-Predicate-predicate" class="headerlink" title="5、filter(Predicate&lt;? super T&gt; predicate)"></a>5、filter(Predicate&lt;? super T&gt; predicate)</h3><p>不多说,直接上源码:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Optional</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="comment">//省略....</span></span><br><span class="line">  Objects.requireNonNull(predicate);</span><br><span class="line">  <span class="keyword">if</span> (!isPresent()) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> predicate.test(value) ? <span class="built_in">this</span> : empty();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>filter</code>方法接受一个<code>Predicate</code>来对<code>Optional</code>中包含的值进行过滤,如果包含的值满足条件,那么还是返回这个<code>Optional</code><br>;否则返回<code>Optional.empty</code>。</p>
+<p>用法如下:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional&lt;User&gt; user1 = Optional.ofNullable(user).filter(u -&gt; u.getName().length() &lt; <span class="number">6</span>);</span><br></pre></td></tr></table></figure>
+
+<p>如上所示,如果<code>user</code>的<code>name</code>的长度是小于 6 的,则返回。如果是大于 6 的,则返回一个<code>EMPTY</code>对象。</p>
+<h2 id="实战使用"><a href="#实战使用" class="headerlink" title="实战使用"></a>实战使用</h2><h3 id="例一、在函数方法中"><a href="#例一、在函数方法中" class="headerlink" title="例一、在函数方法中"></a>例一、在函数方法中</h3><p>以前写法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getCity</span><span class="params">(User user)</span>  <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">  <span class="keyword">if</span> (user != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span>(user.getAddress() != <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="type">Address</span> <span class="variable">address</span> <span class="operator">=</span> user.getAddress();</span><br><span class="line">      <span class="keyword">if</span>(address.getCity() != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> address.getCity();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Excpetion</span>(<span class="string">&quot;取值错误&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>JAVA8 写法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getCity</span><span class="params">(User user)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">  <span class="keyword">return</span> Optional.ofNullable(user)</span><br><span class="line">                  .map(u-&gt; u.getAddress())</span><br><span class="line">                  .map(a-&gt;a.getCity())</span><br><span class="line">                  .orElseThrow(()-&gt;<span class="keyword">new</span> <span class="title class_">Exception</span>(<span class="string">&quot;取值错误&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="例二、在主程序中"><a href="#例二、在主程序中" class="headerlink" title="例二、在主程序中"></a>例二、在主程序中</h3><p>以前写法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (user!=<span class="literal">null</span>) &#123;</span><br><span class="line">  dosomething(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>JAVA8 写法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.ofNullable(user).ifPresent(u-&gt;&#123;</span><br><span class="line">  dosomething(u);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="例三、对象存在返回满足条件的对象-否则创建对象"><a href="#例三、对象存在返回满足条件的对象-否则创建对象" class="headerlink" title="例三、对象存在返回满足条件的对象,否则创建对象"></a>例三、对象存在返回满足条件的对象,否则创建对象</h3><p>以前写法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> User <span class="title function_">getUser</span><span class="params">(User user)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">  <span class="keyword">if</span> (user!=<span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> user.getName();</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">&quot;zhangsan&quot;</span>.equals(name)) &#123;</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    user = <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">    user.setName(<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>java8 写法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> User <span class="title function_">getUser</span><span class="params">(User user)</span> &#123;</span><br><span class="line">  <span class="comment">// 使用Optional.ofNullable判断对象是否存在：</span></span><br><span class="line">  <span class="comment">// 1、存在则过滤满足属性值的对象，过滤操作</span></span><br><span class="line">  <span class="comment">//      1.1 过滤有 不做后续操作，得到用户</span></span><br><span class="line">  <span class="comment">//      1.2 过滤没有 执行orElseGet方法，创建用户</span></span><br><span class="line">  <span class="comment">// 2、不存在则执行orElseGet方法，创建用户</span></span><br><span class="line">  <span class="keyword">return</span> Optional.ofNullable(user)</span><br><span class="line">              .filter(u-&gt;<span class="string">&quot;zhangsan&quot;</span>.equals(u.getName()))</span><br><span class="line">              .orElseGet(()-&gt; &#123;</span><br><span class="line">                <span class="type">User</span> <span class="variable">user1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">                user1.setName(<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> user1;</span><br><span class="line">              &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>后端</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+</search>
