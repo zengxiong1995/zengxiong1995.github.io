@@ -1173,19 +1173,22 @@
 <p>在大多数 <code>Linux</code> 系统中，我们可以使用 <code>iptables</code> 命令来管理防火墙规则。</p>
 <p>例如，我们要开放 <code>8080</code> 端口，可以使用以下命令：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo iptables -I INPUT -p tcp --dport 8080 -j ACCEPT</span><br></pre></td></tr></table></figure>
+
 <p>该命令将在防火墙规则中添加一条规则，允许 <code>TCP</code> 协议通过 <code>8080</code> 端口进行连接。</p>
 <h4 id="firewalld"><a href="#firewalld" class="headerlink" title="firewalld"></a>firewalld</h4><p>使用 <code>firewalld</code> 命令开放端口</p>
 <p>在一些新的 Linux 系统中，我们可以使用 firewalld 命令来管理防火墙规则。</p>
 <p>例如，我们要开放 8080 端口，可以使用以下命令：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">sudo firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br></pre></td></tr></table></figure>
+
 <p>参数解读: 该命令将在防火墙规则中添加一条规则，允许 <code>TCP</code> 协议通过 <code>8080</code> 端口进行连接。<code>--permanent</code> 参数将该规则永久性添加到防火墙中。</p>
 <p>重新加载防火墙规则：<code>sudo firewall-cmd --reload</code></p>
-<h3 id="2-重启防火墙"><a href="#2-重启防火墙" class="headerlink" title="2. 重启防火墙"></a>2. 重启防火墙</h3><p>   无论是使用 <code>iptables</code> 还是 <code>firewalld</code> 命令，都需要在开放端口之后重启防火墙才能使其生效。下面是重启 <code>iptables</code> 和 <code>firewalld</code> 的命令：</p>
+<h3 id="2-重启防火墙"><a href="#2-重启防火墙" class="headerlink" title="2. 重启防火墙"></a>2. 重启防火墙</h3><p>无论是使用 <code>iptables</code> 还是 <code>firewalld</code> 命令，都需要在开放端口之后重启防火墙才能使其生效。下面是重启 <code>iptables</code><br>和 <code>firewalld</code> 的命令：</p>
 <p>重启 <code>iptables</code>：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service iptables restart</span><br></pre></td></tr></table></figure>
 
 <p>重启 <code>firewalld</code>：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo systemctl restart firewalld</span><br></pre></td></tr></table></figure>
+
 <p>注意：在使用重启命令之前，请先确定您已经正确地修改了 <code>iptables</code> 或 <code>firewalld</code> 配置文件。如果出现问题，可能会导致您无法访问您的服务器。建议在修改配置文件之前备份。</p>
 <hr>
 <p>执行如下命令⚓</p>
@@ -1196,7 +1199,7 @@
 <p>注意我们需要新建三个文件夹：<br>&#x2F;home&#x2F;soft&#x2F;minio : 存储minio软件包和启动脚本的文件夹<br>&#x2F;data&#x2F;minio&#x2F;minioLog : 存储minio运行日志的文件夹<br>&#x2F;data&#x2F;minio&#x2F;minioData : 存储minio数据的文件夹</p>
 <h3 id="将minio转成可执行的文件"><a href="#将minio转成可执行的文件" class="headerlink" title="将minio转成可执行的文件"></a>将minio转成可执行的文件</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod +x minio</span><br></pre></td></tr></table></figure>
 
-<h3 id="启动脚本"><a href="#启动脚本" class="headerlink" title="启动脚本"></a>启动脚本</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost minio]# cat minioRun.sh </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">export MINIO_ROOT_USER=root</span><br><span class="line">export MINIO_ROOT_PASSWORD=zeng@1125</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">nohup</span>启动服务 指定文件存放路径 /root/data 还有设置日志文件路径 /root/minio/log</span></span><br><span class="line">nohup ./minio server --address :9998 --console-address :9999 /data/minio/minioData &gt; /data/minio/minioLog/minio.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+<h3 id="启动脚本"><a href="#启动脚本" class="headerlink" title="启动脚本"></a>启动脚本</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动minio服务</span></span><br><span class="line">[root@localhost minio]# ./minioRun.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看脚本</span></span><br><span class="line">[root@localhost minio]# cat minioRun.sh </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">export MINIO_ROOT_USER=root</span><br><span class="line">export MINIO_ROOT_PASSWORD=zeng@1125</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">nohup</span>启动服务 指定文件存放路径 /root/data 还有设置日志文件路径 /root/minio/log</span></span><br><span class="line">nohup ./minio server --address :9998 --console-address :9999 /data/minio/minioData &gt; /data/minio/minioLog/minio.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
 
 <h3 id="开发端口"><a href="#开发端口" class="headerlink" title="开发端口"></a>开发端口</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加我们需要的端口，使用tcp暴露</span></span><br><span class="line">[root@localhost bin]# firewall-cmd --zone=public --add-port=8081/tcp --permanent</span><br><span class="line">success</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新加载防火墙</span></span><br><span class="line">[root@localhost bin]# firewall-cmd --reload</span><br><span class="line">success</span><br></pre></td></tr></table></figure>
 
@@ -1207,6 +1210,22 @@
       </categories>
       <tags>
         <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>平安喜乐</title>
+    <url>/2023/12/24/%E5%9C%A3%E8%AF%9E%E8%8A%82/</url>
+    <content><![CDATA[<h1 id="喜乐"><a href="#喜乐" class="headerlink" title="喜乐"></a>喜乐</h1><p><img src="https://s2.loli.net/2023/12/24/cOsuvZtr9yfdFeJ.png" alt="image.png"></p>
+<p><img src="https://s2.loli.net/2023/12/24/Cs6mu9a8GR54QZM.jpg" alt="6805566dc6e3a8d60f8a9410d9cc3aab.jpg"></p>
+<p><img src="https://s2.loli.net/2023/12/24/6WmYuaUeSCRDZ7l.jpg" alt="c99122d3f9b0b273933c11d231f8bfef.jpg"></p>
+<p><img src="https://s2.loli.net/2023/12/24/kf5YuDeOxM3mrVh.jpg" alt="31357bcfd8020215daac197c1cae556d.jpg"></p>
+<p>!<img src="https://s2.loli.net/2023/12/24/pOTaV3eHBjPQ16f.jpg" alt="ad2808de0db0db1d69524c9e6ffd1e9c.jpg"></p>
+]]></content>
+      <categories>
+        <category>Merry Christmas</category>
+      </categories>
+      <tags>
+        <tag>Merry Christmas</tag>
       </tags>
   </entry>
 </search>
